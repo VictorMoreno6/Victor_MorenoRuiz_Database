@@ -1,0 +1,19 @@
+
+w
+java:S1104"ZMake customersTable a static final constant or non-public and provide accessors if needed.(•À8ï‡èã³1
+p
+java:S1104"SMake idField a static final constant or non-public and provide accessors if needed.(¦õ¾Û8ï‡èã³1
+s
+java:S1104 "VMake fnameField a static final constant or non-public and provide accessors if needed.(ş¢ÿ§8ï‡èã³1
+x
+java:S1104!"VMake lnameField a static final constant or non-public and provide accessors if needed.(ûù¥•ıÿÿÿÿ8ï‡èã³1
+x
+java:S1104""VMake emailField a static final constant or non-public and provide accessors if needed.(şãÓâúÿÿÿÿ8ï‡èã³1
+s
+java:S1104#"VMake phoneField a static final constant or non-public and provide accessors if needed.(‘¶Ì8ğ‡èã³1
+v
+java:S1104$"TMake dobField a static final constant or non-public and provide accessors if needed.(¨²œúÿÿÿÿ8ğ‡èã³1
+‰
+java:S1130+"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ú¿ŸÔ8ˆèã³1
+T
+java:S1172?"2Remove this unused method parameter "actionEvent".(şé®Ÿıÿÿÿÿ8£ˆèã³1

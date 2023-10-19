@@ -1,0 +1,12 @@
+
+m	java:S117)"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(é¤ßª8€Äù´1
+H
+java:S1168/"+Return an empty collection instead of null.(¥¹ï8§Äù´1
+o
+java:S62049"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(™“—è8¨Äù´1
+o
+java:S6204["RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹8¬Äù´1
+H
+java:S1168]"+Return an empty collection instead of null.(¥¹ï8­Äù´1
+V
+java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8­Äù´1

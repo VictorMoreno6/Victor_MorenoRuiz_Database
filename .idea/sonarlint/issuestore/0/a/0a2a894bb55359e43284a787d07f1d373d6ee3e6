@@ -1,0 +1,13 @@
+
+q
+java:S1104"VMake actualUser a static final constant or non-public and provide accessors if needed.(Ó‰­ïûÿÿÿÿ
+T
+java:S1117="9Rename "alert" which hides the field declared at line 25.(Ö‰Õïÿÿÿÿÿ
+T
+java:S1117v"9Rename "alert" which hides the field declared at line 25.(Ö×Íõÿÿÿÿÿ
+N
+java:S1172‡"2Remove this unused method parameter "actionEvent".(ˆ÷‰àøÿÿÿÿ
+8	java:S131""Add a default case to this switch.(Ø•ƒ»
+8	java:S131¡""Add a default case to this switch.(Ø•ƒ»
+K
+java:S1144u"5Remove this unused private "closeWindowEvent" method.(ôöÁ™
