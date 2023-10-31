@@ -58,7 +58,7 @@ public class AddOrderController extends BaseScreenController {
 
         itemsTable.setOnMouseClicked(this::handleTableClick);
         customerIdCombo.getItems().addAll(orderService.getIds());
-        itemsComboBox.getItems().addAll(orderItemService.getMenuItemsName(orderService.getIds()));
+        //itemsComboBox.getItems().addAll(orderItemService.getMenuItemsName(orderService.getIds()));
     }
 
     private void handleTableClick(MouseEvent event) {
@@ -104,8 +104,8 @@ public class AddOrderController extends BaseScreenController {
         if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue() == null) {
             getPrincipalController().sacarAlertError(Constants.THERE_IS_AN_EMPTY_FIELD);
         } else {
-            MenuItem menuItem = new MenuItem(0, itemsComboBox.getValue().toString(), 0);
-            OrderItem oi = new OrderItem(0, 0, menuItem , Integer.parseInt(quantityItemField.getText()));
+            MenuItem mi = new MenuItem(0, (String) itemsComboBox.getValue(), "", 0);
+            OrderItem oi = new OrderItem(0, 0, mi, Integer.parseInt(quantityItemField.getText()));
             orderItems.add(oi);
             setTable();
         }

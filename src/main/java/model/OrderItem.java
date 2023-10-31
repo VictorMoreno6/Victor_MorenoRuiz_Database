@@ -8,7 +8,7 @@ public class OrderItem {
 
     private int id;
     private int idOrder;
-    private model.MenuItem menuItem;
+    private MenuItem menuItem;
     private int quantity;
 
 }

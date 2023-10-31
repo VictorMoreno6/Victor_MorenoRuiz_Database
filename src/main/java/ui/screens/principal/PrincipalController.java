@@ -108,11 +108,8 @@ public class PrincipalController {
 
     public void initialize() {
         menuPrincipal.setVisible(false);
-        cargarPantalla(Screens.WELCOME);
-        menuPrincipal.setVisible(true);
+        cargarPantalla(Screens.LOGIN);
     }
-
-    //////__________________________________________________________________________________////////////////////////////////////////
 
     private void closeWindowEvent(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

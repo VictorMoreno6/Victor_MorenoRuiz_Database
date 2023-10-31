@@ -14,8 +14,7 @@ public interface CustomersDAO {
 
     Either<CustomerError, Integer> save(Customer c);
 
-    //TODO: only one customer
-    Either<CustomerError, Integer> update(Customer old, Customer neew);
+    Either<CustomerError, Integer> update(Customer customer);
 
-    Either<CustomerError, Integer> delete(Customer c);
+    Either<CustomerError, Integer> delete(Customer c, boolean deleteOrders);
 }

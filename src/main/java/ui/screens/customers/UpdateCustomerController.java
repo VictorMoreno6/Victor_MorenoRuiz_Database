@@ -81,9 +81,9 @@ public class UpdateCustomerController extends BaseScreenController {
     }
 
     public void updateCustomer(ActionEvent actionEvent) {
-        if(idField.getText() != null && !idField.getText().isEmpty() && fnameField.getText() != null && !fnameField.getText().isEmpty() && lnameField.getText() != null && !lnameField.getText().isEmpty() && emailField.getText() != null && !emailField.getText().isEmpty() && phoneField.getText() != null && !phoneField.getText().isEmpty() && dobField.getValue() != null && !dobField.getValue().toString().isEmpty()){
-            Customer newCustomer = new Customer(Integer.parseInt(idField.getText()), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue());
-            if(servicesCustomers.update(oldCustomer, newCustomer).isRight()){
+        if(!idField.getText().isEmpty() && fnameField.getText() != null && !fnameField.getText().isEmpty() && lnameField.getText() != null && !lnameField.getText().isEmpty() && emailField.getText() != null && !emailField.getText().isEmpty() && phoneField.getText() != null && !phoneField.getText().isEmpty() && dobField.getValue() != null && !dobField.getValue().toString().isEmpty()){
+            Customer newCustomer = new Customer(oldCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue());
+            if(servicesCustomers.update(newCustomer).isRight()){
                 getPrincipalController().sacarAlertInfo(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);
                 setTable();
             } else

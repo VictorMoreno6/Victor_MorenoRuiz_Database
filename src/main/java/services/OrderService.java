@@ -3,10 +3,12 @@ package services;
 import common.Constants;
 import dao.CustomersDAO;
 import dao.OrderDAO;
+import dao.OrderItemDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import model.Customer;
 import model.Order;
+import model.OrderItem;
 import model.errors.OrderError;
 
 import java.time.LocalDate;
@@ -21,6 +23,9 @@ public class OrderService {
 
     @Inject
     private CustomersDAO dao2;
+
+    @Inject
+    private OrderItemDAO dao3;
 
 
     public Either<OrderError, List<Order>> getAll() {
@@ -45,6 +50,17 @@ public class OrderService {
                     .toList();
         else
             return null;
+    }
+
+    public List<OrderItem> getOrderItems(int id){
+        List<OrderItem> aux = new ArrayList<>();
+        List<OrderItem> list = dao3.getAll();
+
+        for(OrderItem o : list){
+            if(o.getIdOrder() == id)
+                aux.add(o);
+        }
+        return aux;
     }
 
     public String getCustomerName(int id){

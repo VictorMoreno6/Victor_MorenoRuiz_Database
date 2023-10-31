@@ -1,12 +1,22 @@
 
 w
-java:S1192g"ZDefine a constant instead of duplicating this literal "Error connecting database" 6 times.(›ûÑÑ8ºçÅ‘´1
-„
-java:S1192'"gDefine a constant instead of duplicating this literal "Error al conectar con la base de datos" 3 times.(ÀöŒæ8Ì¥Å‘´1
-m	java:S1170"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÛÿäÐ8Í¥Å‘´1
-r	java:S1171"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ý°ú–úÿÿÿÿ8Í¥Å‘´1
-r	java:S1172"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»ºåóÿÿÿÿÿ8Í¥Å‘´1
-g
-java:S2259J"EA "NullPointerException" could be thrown; "readRS()" can return null.(Ä‚¤°úÿÿÿÿ8í¥Å‘´1
+java:S1192h"ZDefine a constant instead of duplicating this literal "Error connecting database" 4 times.(›ûÑÑ8ßãä±¶1
+m	java:S1171"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÛÿäÐ8ßãä±¶1
+r	java:S1172"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ý°ú–úÿÿÿÿ8ßãä±¶1
+r	java:S1173"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»ºåóÿÿÿÿÿ8ßãä±¶1
+d
+java:S2259M"GA "NullPointerException" could be thrown; "customers" is nullable here.(ì™–£8‘åä±¶1
+r
+java:S2095—"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(£Á™ßùÿÿÿÿ8‘åä±¶1
+r
+java:S2095›"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(èÔ«éùÿÿÿÿ8‘åä±¶1
+r
+java:S2095£"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(È„Ãûýÿÿÿÿ8‘åä±¶1
+r
+java:S2095±"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(–ãè¤ýÿÿÿÿ8‘åä±¶1
+m
+java:S2095Ÿ"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(…úè¿8‘åä±¶1
+r
+java:S2095°"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ç¿Ý´úÿÿÿÿ8‘åä±¶1
 H
-java:S1168<"+Return an empty collection instead of null.(¥¹ï8ô¥Å‘´1
+java:S1168="+Return an empty collection instead of null.(¥¹ï8·åä±¶1

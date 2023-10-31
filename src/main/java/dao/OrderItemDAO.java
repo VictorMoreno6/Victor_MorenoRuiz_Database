@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface OrderItemDAO {
 
-     List<OrderItem> getAll(int id);
+     List<OrderItem> getAll();
 
      Either<OrderError, Integer> save(List<OrderItem> orderItems, Order order);
 
      Either<OrderError, Integer> delete(int id);
+
+
+
+
 }

@@ -1,20 +1,20 @@
 
 L
-java:S3740""/Provide the parametrized type for this generic.(ÿ¬Òª8ÒŞ´1
+java:S3740""/Provide the parametrized type for this generic.(ÿ¬Òª8‘–úå·1
 L
-java:S3740$"/Provide the parametrized type for this generic.(Ó¢â§8ÓŞ´1
+java:S3740$"/Provide the parametrized type for this generic.(Ó¢â§8‘–úå·1
 
-java:S1104/"]Make customerNameLabel a static final constant or non-public and provide accessors if needed.(å†¼§ıÿÿÿÿ8ÙŞ´1
+java:S1104/"]Make customerNameLabel a static final constant or non-public and provide accessors if needed.(å†¼§ıÿÿÿÿ8•–úå·1
 ‰
-java:S11309"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ú¿ŸÔ8ÉŞ´1
-]	java:S125?"<This block of commented-out lines of code should be removed.(‰éşÿÿÿÿ8ÍŞ´1
-X	java:S125C"<This block of commented-out lines of code should be removed.(µ¸È8ĞŞ´1
+java:S11309"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ú¿ŸÔ8Ç—úå·1
+]	java:S125?"<This block of commented-out lines of code should be removed.(‰éşÿÿÿÿ8Ó—úå·1
+X	java:S125C"<This block of commented-out lines of code should be removed.(µ¸È8à—úå·1
 T
-java:S1854]"7Remove this useless assignment to local variable "aux".(í“°Ô8ÚŞ´1
+java:S1854]"7Remove this useless assignment to local variable "aux".(í“°Ô8ı—úå·1
 T
-java:S1172\"2Remove this unused method parameter "actionEvent".(‡Ó×Èùÿÿÿÿ8ÛŞ´1
-]	java:S125m"<This block of commented-out lines of code should be removed.(ËÔšóşÿÿÿÿ8åŞ´1
+java:S1172\"2Remove this unused method parameter "actionEvent".(‡Ó×Èùÿÿÿÿ8ÿ—úå·1
+]	java:S125m"<This block of commented-out lines of code should be removed.(ËÔšóşÿÿÿÿ8–˜úå·1
 \
-java:S1128"?Remove this unused import 'javafx.beans.value.ObservableValue'.(´œ«Å8çŞ´1
+java:S1128"?Remove this unused import 'javafx.beans.value.ObservableValue'.(´œ«Å8š˜úå·1
 H
-java:S1128"+Remove this unused import 'model.MenuItem'.(¼Ò¿à8èŞ´1
+java:S1128"+Remove this unused import 'model.MenuItem'.(¼Ò¿à8›˜úå·1

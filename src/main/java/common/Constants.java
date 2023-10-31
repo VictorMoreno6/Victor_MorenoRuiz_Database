@@ -44,4 +44,7 @@ public class Constants {
     public static final String ORDER_ID_DOES_NOT_EXIST = "Order Id does not exist";
     public static final String CUSTOMER_DOES_NOT_EXIST = "Customer does not exist";
     public static final String CUSTOMER_UPDATED_SUCCESSFULLY = "Customer updated successfully.";
+    public static final String ERROR_CONNECTING_TO_DATABASE = "Error connecting to database";
+    public static final String ROOT = "root";
+    public static final String DAM = "2dam";
 }

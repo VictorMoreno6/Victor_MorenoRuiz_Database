@@ -14,6 +14,7 @@ module javafx {
     requires io.vavr;
     requires jakarta.xml.bind;
     requires java.sql;
+    requires com.zaxxer.hikari;
 
     exports ui.main to javafx.graphics;
     exports ui.screens.principal;

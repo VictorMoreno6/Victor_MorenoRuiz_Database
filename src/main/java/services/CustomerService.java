@@ -31,12 +31,23 @@ public class CustomerService {
         return dao.save(c);
     }
 
-    public Either<CustomerError, Integer> update(Customer old, Customer neew) {
-        return dao.update(old, neew);
+    public Either<CustomerError, Integer> update(Customer customer) {
+        return dao.update(customer);
     }
 
-    public Either<CustomerError, Integer> delete(Customer c) {
-        return dao.delete(c);
+    public Either<CustomerError, Boolean> delete(Customer c, Boolean deleteOrders) {
+        Either<CustomerError, Integer> resultDao = dao.delete(c, deleteOrders);
+        Either<CustomerError, Boolean> result;
+        if (resultDao.isLeft()) {
+            if (resultDao.getLeft().getNumError() == 1451){
+                result = Either.right(true);
+            }else {
+                result = Either.left(resultDao.getLeft());
+            }
+        } else {
+            result = Either.right(false);
+        }
+        return result;
     }
 
     public List<Order> getOrdersOfCustomer(int customer_Id) {

@@ -1,6 +1,7 @@
 package ui.screens.customers;
 
 import common.Constants;
+import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.Customer;
 import model.Order;
+import model.errors.CustomerError;
 import services.CustomerService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
@@ -97,16 +99,17 @@ public class DeleteCustomerController extends BaseScreenController {
     }
 
     public void deleteCustomer(ActionEvent actionEvent) {
-        if (servicesCustomers.getOrdersOfCustomer(selectedCustomer.getId()) == null){
-            servicesCustomers.delete(selectedCustomer);
-        } else if (getPrincipalController().showConfirmationDialog("Delete","Are you sure you want to continue?, If you delete the customer, all orders they have will also be deleted.")) {
-            servicesCustomers.getOrdersOfCustomer(selectedCustomer.getId()).forEach(orderService::delete);
-            servicesCustomers.delete(selectedCustomer);
+        if (selectedCustomer != null){
+            servicesCustomers.delete(selectedCustomer, false).peek(result -> {
+                if (result) {
+                    if (getPrincipalController().showConfirmationDialog("Delete", "Are you sure you want to continue?, If you delete the customer, all orders they have will also be deleted.")) {
+                        servicesCustomers.delete(selectedCustomer, true);
+                    }
+                    setTables();
+                }
+            }).peekLeft(customerError -> getPrincipalController().sacarAlertError(customerError.getMessage()));
         }
-        try {
-            principalCargado();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        else
+            getPrincipalController().sacarAlertError("Select a customer to delete");
     }
 }

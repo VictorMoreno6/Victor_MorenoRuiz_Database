@@ -18,4 +18,4 @@ java:S1130/"lRemove the declaration of thrown exception 'java.io.IOException', 
 T
 java:S1172S"2Remove this unused method parameter "actionEvent".(¥‹ωμÿÿÿÿÿ8†ϋζ‘΄1
 P
-java:S1128"3Remove this unused import 'io.vavr.control.Either'.(χΏ’8‚λ‘΄1
+java:S1128"3Remove this unused import 'io.vavr.control.Either'.(χΏ’8“†²¶1

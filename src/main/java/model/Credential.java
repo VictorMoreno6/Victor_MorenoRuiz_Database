@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MenuItem {
+public class Credential {
+
     private int id;
-    private String name;
-    private String description;
-    private double price;
+    private String username;
+    private String password;
 }

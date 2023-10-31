@@ -1,5 +1,6 @@
 package dao.impl;
 
+import common.Constants;
 import dao.CustomersDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
@@ -36,7 +37,7 @@ public class CustomerDaoJdbc implements CustomersDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            either = Either.left(new CustomerError(0, "Error al conectar con la base de datos"));
+            either = Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
         }
         return either;
     }
@@ -70,17 +71,17 @@ public class CustomerDaoJdbc implements CustomersDAO {
             preparedStatement.setInt(1, id);
 
             ResultSet rs = preparedStatement.executeQuery();
-            readRS(rs);
-            Customer customer = readRS(rs).get(0);
 
-            if (customer == null){
-                either = Either.left(new CustomerError(0, "Error al conectar con la base de datos"));
+            List<Customer> customers = readRS(rs);
+
+            if (customers.isEmpty()){
+                either = Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
             } else {
-                either = Either.right(customer);
+                either = Either.right(customers.get(0));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CustomerDaoJdbc.class.getName()).log(Level.SEVERE, null, ex);
-            either = Either.left(new CustomerError(0, "Error al conectar con la base de datos"));
+            either = Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
         }
         return either;
     }
@@ -102,7 +103,7 @@ public class CustomerDaoJdbc implements CustomersDAO {
             if (rs == 0){
                 either = Either.left(new CustomerError(0, "Error connecting database"));
             } else {
-                either = Either.right(1);
+                either = Either.right(0);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CustomerDaoJdbc.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,24 +113,24 @@ public class CustomerDaoJdbc implements CustomersDAO {
     }
 
     @Override
-    public Either<CustomerError, Integer> update(Customer old, Customer neew) {
+    public Either<CustomerError, Integer> update(Customer customer) {
         Either<CustomerError, Integer> either;
         try(Connection con = db.getConnection();
             PreparedStatement preparedStatement = con.prepareStatement("UPDATE customers SET id = ?, first_name = ?, last_name = ?, email = ?, phone = ?, date_of_birth = ? WHERE id = ?")){
-            preparedStatement.setInt(1, neew.getId());
-            preparedStatement.setString(2, neew.getFirst_name());
-            preparedStatement.setString(3, neew.getLast_name());
-            preparedStatement.setString(4, neew.getEmail());
-            preparedStatement.setString(5, neew.getPhone());
-            preparedStatement.setDate(6, Date.valueOf(neew.getDob()));
-            preparedStatement.setInt(7, old.getId());
+            preparedStatement.setInt(1, customer.getId());
+            preparedStatement.setString(2, customer.getFirst_name());
+            preparedStatement.setString(3, customer.getLast_name());
+            preparedStatement.setString(4, customer.getEmail());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setDate(6, Date.valueOf(customer.getDob()));
+            preparedStatement.setInt(7, customer.getId());
 
             int rs = preparedStatement.executeUpdate();
 
             if (rs == 0){
                 either = Either.left(new CustomerError(0, "Error connecting database"));
             } else {
-                either = Either.right(1);
+                either = Either.right(0);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CustomerDaoJdbc.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,23 +140,58 @@ public class CustomerDaoJdbc implements CustomersDAO {
     }
 
     @Override
-    public Either<CustomerError, Integer> delete(Customer c) {
-        Either<CustomerError, Integer> either;
-        try(Connection con = db.getConnection();
-            PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM customers WHERE id = ?")){
-            preparedStatement.setInt(1, c.getId());
+    public Either<CustomerError, Integer> delete(Customer c, boolean deleteOrders) {
+        Either<CustomerError, Integer> result;
+        Connection con = null;
+        if (deleteOrders){
+            try {
+                con = db.getConnection();
+                con.setAutoCommit(false);
 
-            int rs = preparedStatement.executeUpdate();
+                PreparedStatement statement1 = con.prepareStatement("DELETE FROM order_items WHERE order_id IN (SELECT id FROM orders WHERE customer_id = ?)");
+                statement1.setInt(1, c.getId());
+                statement1.executeUpdate();
 
-            if (rs == 0){
-                either = Either.left(new CustomerError(0, "Error connecting database"));
-            } else {
-                either = Either.right(1);
+                PreparedStatement statement2 = con.prepareStatement("DELETE FROM orders WHERE customer_id = ?");
+                statement2.setInt(1, c.getId());
+                statement2.executeUpdate();
+
+                PreparedStatement statement3 = con.prepareStatement("DELETE FROM credentials WHERE customer_id = ?");
+                statement3.setInt(1, c.getId());
+                statement3.executeUpdate();
+
+                PreparedStatement statement4 = con.prepareStatement("DELETE FROM customers WHERE id = ?");
+                statement4.setInt(1, c.getId());
+                statement4.executeUpdate();
+
+                con.commit();
+
+                result = Either.right(0);
+            } catch (Exception e) {
+               result = Either.left(new CustomerError(0, "There was an error"));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerDaoJdbc.class.getName()).log(Level.SEVERE, null, ex);
-            either = Either.left(new CustomerError(0, "Error connecting database"));
+        } else {
+            try{
+                con = db.getConnection();
+                PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM customers WHERE id = ?");
+                PreparedStatement preparedStatement2 = con.prepareStatement("DELETE FROM credentials WHERE customer_id = ?");
+                preparedStatement.setInt(1, c.getId());
+                preparedStatement2.setInt(1, c.getId());
+
+                preparedStatement.executeUpdate();
+                preparedStatement2.executeUpdate();
+
+                result = Either.right(0);
+            } catch (SQLException ex) {
+                if (ex.getErrorCode() == 1451){
+                    result = Either.left(new CustomerError(ex.getErrorCode(), "The customer has orders"));
+                } else {
+                    result = Either.left(new CustomerError(0, "There was an error"));
+                }
+            }
         }
-        return either;
+        return result;
     }
+
+
 }

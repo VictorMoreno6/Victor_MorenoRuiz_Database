@@ -1,14 +1,13 @@
 package services;
 
+import dao.MenuItemDAO;
 import dao.OrderItemDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import model.*;
 import model.errors.OrderError;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderItemService {
@@ -16,8 +15,11 @@ public class OrderItemService {
     @Inject
     private OrderItemDAO orderItemDAO;
 
-    public List<OrderItem> getAll(int id) {
-        return orderItemDAO.getAll(id);
+    @Inject
+    private MenuItemDAO menuItemDAO;
+
+    public List<OrderItem> getAll() {
+        return orderItemDAO.getAll();
     }
 
     public Either<OrderError, Integer> save(List<OrderItem> orderItems, Order order) {
@@ -29,7 +31,7 @@ public class OrderItemService {
         return new SimpleStringProperty(value.getMenuItem().getName());
     }
 
-    public List<String> getMenuItemsName(List<Integer> ids) {
+   /* public List<String> getMenuItemsName(List<Integer> ids) {
         List<String> result = new ArrayList<>();
         for (Integer i : ids) {
             List<OrderItem> aux =  orderItemDAO.getAll(i);
@@ -39,5 +41,5 @@ public class OrderItemService {
         }
 
         return result;
-    }
+    }*/
 }

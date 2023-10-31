@@ -69,10 +69,23 @@ public class DeleteOrderController extends BaseScreenController {
     public void deleteOrder(ActionEvent actionEvent) {
         if (selectedOrder == null) {
             getPrincipalController().sacarAlertError("No order selected");
-        } else {
-            orderService.delete(selectedOrder);
-            getPrincipalController().sacarAlertInfo("Order Deleted");
-            setTables();
-        }
+        } else
+            getPrincipalController().sacarAlertError("Select a customer to delete");
+
     }
+
+   /* public void deleteCustomer(ActionEvent actionEvent) {
+        if (selectedCustomer != null){
+            servicesCustomers.delete(selectedCustomer, false).peek(result -> {
+                if (result) {
+                    if (getPrincipalController().showConfirmationDialog("Delete", "Are you sure you want to continue?, If you delete the customer, all orders they have will also be deleted.")) {
+                        servicesCustomers.delete(selectedCustomer, true);
+                    }
+                    setTables();
+                }
+            }).peekLeft(customerError -> getPrincipalController().sacarAlertError(customerError.getMessage()));
+        }
+        else
+            getPrincipalController().sacarAlertError("Select a customer to delete");
+    }*/
 }

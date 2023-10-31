@@ -72,8 +72,8 @@ public class ShowOrderController extends BaseScreenController {
         if (event.getClickCount() == 1) {
             int a = ordersTable.getSelectionModel().getSelectedItem().getCustomer_id();
             itemsTable.getItems().clear();
-            if (!orderItemService.getAll(a).isEmpty())
-                itemsTable.getItems().addAll(orderItemService.getAll(a));
+            if (!orderService.getOrderItems(a).isEmpty())
+                itemsTable.getItems().addAll(orderService.getOrderItems(a));
             customerNameLabel.setText(orderService.getCustomerName(a));
         }
     }
