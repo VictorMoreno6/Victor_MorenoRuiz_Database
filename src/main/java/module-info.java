@@ -15,6 +15,8 @@ module javafx {
     requires jakarta.xml.bind;
     requires java.sql;
     requires com.zaxxer.hikari;
+    requires jakarta.annotation;
+    requires spring.jdbc;
 
     exports ui.main to javafx.graphics;
     exports ui.screens.principal;

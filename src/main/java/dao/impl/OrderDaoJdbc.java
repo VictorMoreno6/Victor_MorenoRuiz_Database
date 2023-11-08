@@ -12,6 +12,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static common.Constants.ERROR_CONNECTING_TO_DATABASE;
 
@@ -65,8 +66,8 @@ public class OrderDaoJdbc implements OrderDAO {
             preparedStatement.setInt(1, id);
 
             ResultSet rs = preparedStatement.executeQuery();
-            readRS(rs);
-            Order order = readRS(rs).get(0);
+            List<Order> list = readRS(rs);
+            Order order = Objects.requireNonNull(list).get(0);
 
             if (order == null){
                 either = Either.left(new OrderError(ERROR_CONNECTING_TO_DATABASE));

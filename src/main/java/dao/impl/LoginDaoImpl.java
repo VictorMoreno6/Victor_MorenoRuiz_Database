@@ -22,6 +22,7 @@ public class LoginDaoImpl implements LoginDAO {
         this.db = db;
     }
 
+    @Override
     public Credential getCredential(String username) {
         Credential credential = null;
         try (Connection myConnection = db.getConnection();
@@ -39,8 +40,7 @@ public class LoginDaoImpl implements LoginDAO {
     }
 
     @Override
-    public boolean doLogin(User user) {
-        Credential credential = getCredential(user.getNombre());
+    public boolean doLogin(User user, Credential credential) {
         if (credential == null)
             return false;
         else

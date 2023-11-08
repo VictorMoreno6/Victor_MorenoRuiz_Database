@@ -11,6 +11,7 @@ import model.Item;
 import model.MenuItem;
 import model.Order;
 import model.OrderItem;
+import services.MenuItemsService;
 import services.OrderItemService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
@@ -45,10 +46,13 @@ public class AddOrderController extends BaseScreenController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
+    private final MenuItemsService menuItemsService;
+
     @Inject
-    public AddOrderController(OrderService orderService, OrderItemService orderItemService) {
+    public AddOrderController(OrderService orderService, OrderItemService orderItemService, MenuItemsService menuItemsService) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
+        this.menuItemsService = menuItemsService;
     }
 
     public void initialize() throws IOException {
@@ -58,7 +62,7 @@ public class AddOrderController extends BaseScreenController {
 
         itemsTable.setOnMouseClicked(this::handleTableClick);
         customerIdCombo.getItems().addAll(orderService.getIds());
-        //itemsComboBox.getItems().addAll(orderItemService.getMenuItemsName(orderService.getIds()));
+        itemsComboBox.getItems().addAll(menuItemsService.getMenuItemsName());
     }
 
     private void handleTableClick(MouseEvent event) {
@@ -88,6 +92,7 @@ public class AddOrderController extends BaseScreenController {
             Order o = new Order(orderService.autoId(), LocalDateTime.now(), (Integer) customerIdCombo.getValue(), Integer.parseInt(tableOrderField.getText()));
             if (orderService.save(o).isRight()) {
                 getPrincipalController().sacarAlertInfo(Constants.ORDER_ADDED_SUCCESSFULLY);
+                //Aqui hay un problema
                 if (orderItemService.save(orderItems, o).isRight()){
                     getPrincipalController().sacarAlertInfo(Constants.ORDER_ITEMS_ADDED_SUCCESSFULLY);
                 } else

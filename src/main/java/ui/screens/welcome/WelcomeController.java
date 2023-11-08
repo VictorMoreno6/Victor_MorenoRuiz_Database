@@ -9,6 +9,6 @@ public class WelcomeController extends BaseScreenController {
 
     @Override
     public void principalCargado() {
-        welcomeLabel.setText("Welcome " + getPrincipalController().actualUser.getNombre());
+        welcomeLabel.setText("Welcome " + getPrincipalController().actualUser.getUsername());
     }
 }

@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import model.*;
 import model.errors.OrderError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderItemService {
@@ -30,16 +31,4 @@ public class OrderItemService {
     public SimpleStringProperty printMenuItemName(OrderItem value) {
         return new SimpleStringProperty(value.getMenuItem().getName());
     }
-
-   /* public List<String> getMenuItemsName(List<Integer> ids) {
-        List<String> result = new ArrayList<>();
-        for (Integer i : ids) {
-            List<OrderItem> aux =  orderItemDAO.getAll(i);
-            for (OrderItem orderItem : aux) {
-                result.add(orderItem.getMenuItem().getName());
-            }
-        }
-
-        return result;
-    }*/
 }

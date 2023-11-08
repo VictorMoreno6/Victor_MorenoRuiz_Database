@@ -1,22 +1,24 @@
 
+Q
+java:S3740 "/Provide the parametrized type for this generic.(É†çÃÿÿÿÿÿ8¯ğğÍº1
 w
-java:S1192h"ZDefine a constant instead of duplicating this literal "Error connecting database" 4 times.(›ûÑÑ8ßãä±¶1
-m	java:S1171"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÛÿäĞ8ßãä±¶1
-r	java:S1172"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ°ú–úÿÿÿÿ8ßãä±¶1
-r	java:S1173"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»ºåóÿÿÿÿÿ8ßãä±¶1
+java:S1192t"ZDefine a constant instead of duplicating this literal "Error connecting database" 4 times.(›ûÑÑ8°ğğÍº1
+m	java:S117="QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÛÿäĞ8°ğğÍº1
+r	java:S117>"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ°ú–úÿÿÿÿ8±ğğÍº1
+r	java:S117?"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»ºåóÿÿÿÿÿ8±ğğÍº1
 d
-java:S2259M"GA "NullPointerException" could be thrown; "customers" is nullable here.(ì™–£8‘åä±¶1
+java:S2259Y"GA "NullPointerException" could be thrown; "customers" is nullable here.(ì™–£8¤‹Îº1
 r
-java:S2095—"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(£Á™ßùÿÿÿÿ8‘åä±¶1
-r
-java:S2095›"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(èÔ«éùÿÿÿÿ8‘åä±¶1
-r
-java:S2095£"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(È„Ãûıÿÿÿÿ8‘åä±¶1
-r
-java:S2095±"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(–ãè¤ıÿÿÿÿ8‘åä±¶1
+java:S2095¯"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(È„Ãûıÿÿÿÿ8¤‹Îº1
 m
-java:S2095Ÿ"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(…úè¿8‘åä±¶1
+java:S2095«"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(…úè¿8¤‹Îº1
 r
-java:S2095°"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ç¿İ´úÿÿÿÿ8‘åä±¶1
+java:S2095§"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(èÔ«éùÿÿÿÿ8¤‹Îº1
+r
+java:S2095½"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(–ãè¤ıÿÿÿÿ8¤‹Îº1
+r
+java:S2095¼"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ç¿İ´úÿÿÿÿ8¤‹Îº1
+r
+java:S2095£"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(£Á™ßùÿÿÿÿ8¤‹Îº1
 H
-java:S1168="+Return an empty collection instead of null.(¥¹ï8·åä±¶1
+java:S1168I"+Return an empty collection instead of null.(¥¹ï8³‹Îº1

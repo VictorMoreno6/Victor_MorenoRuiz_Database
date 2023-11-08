@@ -194,3 +194,5 @@ j
 :src/main/java/ui/screens/orders/UpdateOrderController.java,6\8\68afcdad84d392c541dcce411fb4005eb22e90e4
 S
 #src/main/java/model/Credential.java,6\8\68d39015010349188c785512b71dfb08d2e37972
+a
+1src/main/java/dao/deprecated/CustomerDaoJdbc.java,a\7\a7ac9bdd6b0c4a9ecca2dc43686659eb9788e0b2

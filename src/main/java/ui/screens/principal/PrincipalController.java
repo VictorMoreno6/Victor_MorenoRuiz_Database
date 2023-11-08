@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.extern.log4j.Log4j2;
+import model.Credential;
 import model.User;
 import ui.screens.common.BaseScreenController;
 import ui.screens.common.Screens;
@@ -23,11 +24,21 @@ import java.util.Optional;
 @Log4j2
 public class PrincipalController {
     private final Alert alert;
-    public User actualUser;
+    public Credential actualUser;
     @FXML
     public BorderPane root;
     Instance<Object> instance;
     private Stage primaryStage;
+    @FXML
+    public MenuItem deleteOrder;
+    @FXML
+    public Menu menuFile;
+    @FXML
+    public Menu menuCustomers;
+    @FXML
+    public Menu menuOrders;
+    @FXML
+    public MenuItem addOrder;
     @FXML
     private MenuBar menuPrincipal;
 
@@ -88,9 +99,18 @@ public class PrincipalController {
         alert.showAndWait();
     }
 
-    public void onLoginDone(User user) {
+    public void onLoginDone(Credential user) {
         actualUser = user;
         menuPrincipal.setVisible(true);
+        if (actualUser.getId() > 0) {
+            addOrder.setVisible(true);
+            menuCustomers.setVisible(false);
+            deleteOrder.setVisible(false);
+        } else {
+            menuCustomers.setVisible(true);
+            deleteOrder.setVisible(true);
+            addOrder.setVisible(false);
+        }
         cargarPantalla(Screens.WELCOME);
     }
 

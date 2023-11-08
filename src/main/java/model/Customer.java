@@ -25,6 +25,10 @@ public class Customer {
         this.dob= LocalDate.parse(elemArray[5]);
     }
 
+    public Customer() {
+
+    }
+
     public String toStringTextfile() {
         return  id + ";" +
                 first_name + ";"+

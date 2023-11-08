@@ -83,12 +83,20 @@ public class ShowOrderController extends BaseScreenController {
         setTables();
     }
 
+    //AQUI HAGO LO DEL ID
     private void setTables() {
         ordersTable.getItems().clear();
-        orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
+        int i = getPrincipalController().actualUser.getId();
+        if (i < 0)
+            orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                 .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
+        else {
+            orderService.get(i).peek(order -> ordersTable.getItems().addAll(order))
+                    .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
+        }
     }
 
+    //TODO
     public void addFilter(ActionEvent actionEvent) {
         List<Order> aux = new ArrayList<>();
         ordersTable.getItems().clear();
@@ -106,6 +114,7 @@ public class ShowOrderController extends BaseScreenController {
                 aux = orderService.getOrdersById((Integer) comboBoxId.getValue());
                 ordersTable.getItems().addAll(aux);
             }
+
             /*if (customerOrderField.getText().equals("")) {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setTitle(Constants.ERROR);

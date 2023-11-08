@@ -194,3 +194,5 @@ w
 G.idea/sonarlint/issuestore/4/b/4b5d5516ba6ed0a52710aef6faa93182c97f0a33,6\9\69c75febbfc49a3c55cd5101797f82fcbd9a161f
 S
 #src/main/java/model/Credential.java,6\8\68d39015010349188c785512b71dfb08d2e37972
+a
+1src/main/java/dao/deprecated/CustomerDaoJdbc.java,a\7\a7ac9bdd6b0c4a9ecca2dc43686659eb9788e0b2

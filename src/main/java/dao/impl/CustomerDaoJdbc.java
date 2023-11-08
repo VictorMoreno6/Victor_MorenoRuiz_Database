@@ -6,6 +6,9 @@ import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import model.Customer;
 import model.errors.CustomerError;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.*;
 
 import java.time.LocalDate;
@@ -22,25 +25,34 @@ public class CustomerDaoJdbc implements CustomersDAO {
     public CustomerDaoJdbc(DBConnection db) {
         this.db = db;
     }
-
-    @Override
+    
+   @Override
     public Either<CustomerError, List<Customer>> getAll() {
-        Either<CustomerError, List<Customer>> either;
+        JdbcTemplate jtm = new JdbcTemplate(db.getDataSource());
+        List l = jtm.query("SELECT * FROM customers", new RowMapper<Customer>() {
 
-        try ( Connection myConnection= db.getConnection();
-              Statement stmt= myConnection.createStatement()){
-              ResultSet rs = stmt.executeQuery("SELECT * FROM customers");
+            public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-              List<Customer> list = readRS(rs);
+                Customer c = new Customer();
 
-              either = Either.right(list);
+                c.setId(rs.getInt("id"));
+                c.setFirst_name(rs.getString("first_name"));
+                c.setLast_name(rs.getString("last_name"));
+                c.setEmail(rs.getString("email"));
+                c.setPhone(rs.getString("phone"));
+                c.setDob(rs.getDate("date_of_birth").toLocalDate());
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            either = Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
+                return c;
+            }
+        });
+        if (l.isEmpty()) {
+            return Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
+        } else {
+            return Either.right(l);
         }
-        return either;
     }
+
+
 
     private List<Customer> readRS(ResultSet rs) {
         try {
@@ -67,14 +79,14 @@ public class CustomerDaoJdbc implements CustomersDAO {
         Either<CustomerError, Customer> either;
 
         try (Connection con = db.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement("SELECT * FROM customers WHERE id = ?")){
+             PreparedStatement preparedStatement = con.prepareStatement("SELECT * FROM customers WHERE id = ?")) {
             preparedStatement.setInt(1, id);
 
             ResultSet rs = preparedStatement.executeQuery();
 
             List<Customer> customers = readRS(rs);
 
-            if (customers.isEmpty()){
+            if (customers.isEmpty()) {
                 either = Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
             } else {
                 either = Either.right(customers.get(0));
@@ -89,8 +101,8 @@ public class CustomerDaoJdbc implements CustomersDAO {
     @Override
     public Either<CustomerError, Integer> save(Customer c) {
         Either<CustomerError, Integer> either;
-        try(Connection con = db.getConnection();
-            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO customers (id, first_name, last_name, email, phone, date_of_birth) VALUES (?, ?, ?, ?, ?, ?)")){
+        try (Connection con = db.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO customers (id, first_name, last_name, email, phone, date_of_birth) VALUES (?, ?, ?, ?, ?, ?)")) {
             preparedStatement.setInt(1, c.getId());
             preparedStatement.setString(2, c.getFirst_name());
             preparedStatement.setString(3, c.getLast_name());
@@ -100,7 +112,7 @@ public class CustomerDaoJdbc implements CustomersDAO {
 
             int rs = preparedStatement.executeUpdate();
 
-            if (rs == 0){
+            if (rs == 0) {
                 either = Either.left(new CustomerError(0, "Error connecting database"));
             } else {
                 either = Either.right(0);
@@ -115,8 +127,8 @@ public class CustomerDaoJdbc implements CustomersDAO {
     @Override
     public Either<CustomerError, Integer> update(Customer customer) {
         Either<CustomerError, Integer> either;
-        try(Connection con = db.getConnection();
-            PreparedStatement preparedStatement = con.prepareStatement("UPDATE customers SET id = ?, first_name = ?, last_name = ?, email = ?, phone = ?, date_of_birth = ? WHERE id = ?")){
+        try (Connection con = db.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement("UPDATE customers SET id = ?, first_name = ?, last_name = ?, email = ?, phone = ?, date_of_birth = ? WHERE id = ?")) {
             preparedStatement.setInt(1, customer.getId());
             preparedStatement.setString(2, customer.getFirst_name());
             preparedStatement.setString(3, customer.getLast_name());
@@ -127,7 +139,7 @@ public class CustomerDaoJdbc implements CustomersDAO {
 
             int rs = preparedStatement.executeUpdate();
 
-            if (rs == 0){
+            if (rs == 0) {
                 either = Either.left(new CustomerError(0, "Error connecting database"));
             } else {
                 either = Either.right(0);
@@ -143,7 +155,7 @@ public class CustomerDaoJdbc implements CustomersDAO {
     public Either<CustomerError, Integer> delete(Customer c, boolean deleteOrders) {
         Either<CustomerError, Integer> result;
         Connection con = null;
-        if (deleteOrders){
+        if (deleteOrders) {
             try {
                 con = db.getConnection();
                 con.setAutoCommit(false);
@@ -168,10 +180,10 @@ public class CustomerDaoJdbc implements CustomersDAO {
 
                 result = Either.right(0);
             } catch (Exception e) {
-               result = Either.left(new CustomerError(0, "There was an error"));
+                result = Either.left(new CustomerError(0, "There was an error"));
             }
         } else {
-            try{
+            try {
                 con = db.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM customers WHERE id = ?");
                 PreparedStatement preparedStatement2 = con.prepareStatement("DELETE FROM credentials WHERE customer_id = ?");
@@ -183,7 +195,7 @@ public class CustomerDaoJdbc implements CustomersDAO {
 
                 result = Either.right(0);
             } catch (SQLException ex) {
-                if (ex.getErrorCode() == 1451){
+                if (ex.getErrorCode() == 1451) {
                     result = Either.left(new CustomerError(ex.getErrorCode(), "The customer has orders"));
                 } else {
                     result = Either.left(new CustomerError(0, "There was an error"));
