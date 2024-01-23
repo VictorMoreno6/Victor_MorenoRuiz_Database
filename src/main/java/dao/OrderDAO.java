@@ -10,10 +10,13 @@ import java.util.List;
 public interface OrderDAO {
     Either<OrderError, List<Order>> getAll();
 
-    //GET
+    Either<OrderError, List<Order>> getAll(int idCustomer);
+
     Either<OrderError, Order> get(int id);
 
     Either<OrderError, Integer> save(Order c);
+
+    Either<OrderError, Integer> save(List<Order> orders);
 
     Either<OrderError, Integer> update(Order c);
 

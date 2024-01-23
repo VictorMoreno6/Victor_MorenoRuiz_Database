@@ -4,11 +4,14 @@ import common.Constants;
 import dao.CustomersDAO;
 import dao.OrderDAO;
 import dao.OrderItemDAO;
+import dao.TableDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import model.Customer;
 import model.Order;
 import model.OrderItem;
+import model.errors.CustomerError;
 import model.errors.OrderError;
 
 import java.time.LocalDate;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class OrderService {
     @Inject
+    @Named("orderDAO")
     private OrderDAO dao;
 
     @Inject
@@ -26,6 +30,9 @@ public class OrderService {
 
     @Inject
     private OrderItemDAO dao3;
+
+    @Inject
+    private TableDAO tabledao;
 
 
     public Either<OrderError, List<Order>> getAll() {
@@ -64,9 +71,17 @@ public class OrderService {
     }
 
     public String getCustomerName(int id){
-        Customer aux = dao2.get(id).get();
-        return aux.getFirst_name() + " " + aux.getLast_name();
+        Either<CustomerError, Customer> eitherCustomer = dao2.get(id);
+
+        if (eitherCustomer.isRight()) {
+            Customer aux = eitherCustomer.get();
+            return aux.getFirst_name() + " " + aux.getLast_name();
+        } else {
+            CustomerError error = eitherCustomer.getLeft();
+            return error.getMessage();
+        }
     }
+
 
     public Integer autoId(){
         List<Integer> aux = new ArrayList<>();
@@ -107,5 +122,21 @@ public class OrderService {
                     .collect(Collectors.toList());
         else
             return null;
+    }
+
+    public List<Integer> getTableIds() {
+        List<Integer> aux = new ArrayList<>();
+        if (!tabledao.getAll().isEmpty())
+            tabledao.getAll().stream().forEach(table -> aux.add(table.getId()));
+        return aux;
+    }
+
+    public double getTotalPrice(int id){
+        double total = 0;
+        List<OrderItem> aux = getOrderItems(id);
+        for(OrderItem o : aux){
+            total += o.getQuantity() * o.getMenuItem().getPrice();
+        }
+        return (double) Math.round(total * 100.0) / 100.0;
     }
 }

@@ -105,8 +105,10 @@ public class DeleteCustomerController extends BaseScreenController {
                     if (getPrincipalController().showConfirmationDialog("Delete", "Are you sure you want to continue?, If you delete the customer, all orders they have will also be deleted.")) {
                         servicesCustomers.delete(selectedCustomer, true);
                     }
-                    setTables();
+                } else {
+                    getPrincipalController().sacarAlertInfo("The customer has been deleted successfully");
                 }
+                setTables();
             }).peekLeft(customerError -> getPrincipalController().sacarAlertError(customerError.getMessage()));
         }
         else

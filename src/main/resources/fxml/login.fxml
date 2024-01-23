@@ -12,8 +12,8 @@
         <StackPane prefHeight="150.0" prefWidth="200.0">
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                 <children>
-                    <TextField fx:id="userTextField" layoutX="375.0" layoutY="150.0" promptText="User"/>
-                    <PasswordField fx:id="passTextField" layoutX="375.0" layoutY="187.0" promptText="Password"/>
+                    <TextField fx:id="userTextField" layoutX="375.0" layoutY="150.0" promptText="User" text="root"/>
+                    <PasswordField fx:id="passTextField" layoutX="375.0" layoutY="187.0" promptText="Password" text="2dam"/>
                     <Button fx:id="button" layoutX="427.0" layoutY="261.0" mnemonicParsing="false" onAction="#doLogin"
                             text="Login">
                         <font>

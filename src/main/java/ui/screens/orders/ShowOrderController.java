@@ -2,14 +2,13 @@ package ui.screens.orders;
 
 import common.Constants;
 import jakarta.inject.Inject;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.*;
-import model.MenuItem;
+import services.CustomerService;
 import services.OrderItemService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
@@ -39,19 +38,22 @@ public class ShowOrderController extends BaseScreenController {
     @FXML
     public TableColumn<OrderItem, Integer> quantityItemColumn;
     @FXML
+    Label priceLabel;
+    @FXML
     Button filterButton;
     @FXML
     DatePicker dateField;
-    @FXML
-    TextField customerOrderField;
     public Label customerNameLabel;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
+    private final CustomerService customerService;
+
     @Inject
-    public ShowOrderController(OrderService orderService, OrderItemService orderItemService) {
+    public ShowOrderController(OrderService orderService, OrderItemService orderItemService, CustomerService customerService) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
+        this.customerService = customerService;
     }
 
     public void initialize() throws IOException {
@@ -70,20 +72,27 @@ public class ShowOrderController extends BaseScreenController {
 
     private void handleTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            int a = ordersTable.getSelectionModel().getSelectedItem().getCustomer_id();
             itemsTable.getItems().clear();
-            if (!orderService.getOrderItems(a).isEmpty())
-                itemsTable.getItems().addAll(orderService.getOrderItems(a));
-            customerNameLabel.setText(orderService.getCustomerName(a));
+            priceLabel.setText("");
+            Order order = ordersTable.getSelectionModel().getSelectedItem();
+            if (!orderService.getOrderItems(order.getId()).isEmpty()){
+                itemsTable.getItems().addAll(orderService.getOrderItems(order.getId()));
+                priceLabel.setText(orderService.getTotalPrice(order.getId()) + "€");
+            }
+            customerNameLabel.setText(customerService.get(order.getCustomer_id()).get().getFirst_name()
+                    + " " + customerService.get(order.getCustomer_id()).get().getLast_name());
         }
     }
 
     @Override
     public void principalCargado() throws IOException {
         setTables();
+        if (getPrincipalController().actualUser.getId() > 0)
+            comboBoxId.setVisible(false);
+        else
+            comboBoxId.setVisible(true);
     }
 
-    //AQUI HAGO LO DEL ID
     private void setTables() {
         ordersTable.getItems().clear();
         int i = getPrincipalController().actualUser.getId();
@@ -91,54 +100,32 @@ public class ShowOrderController extends BaseScreenController {
             orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                 .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
         else {
-            orderService.get(i).peek(order -> ordersTable.getItems().addAll(order))
-                    .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
+            ordersTable.getItems().addAll(orderService.getOrdersById(i));
         }
     }
 
-    //TODO
-    public void addFilter(ActionEvent actionEvent) {
-        List<Order> aux = new ArrayList<>();
+    public void addFilter() {
+        List<Order> aux;
         ordersTable.getItems().clear();
         if (dateField.getValue() == null) {
             if (comboBoxId.getValue() == null) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle(Constants.ERROR);
-                a.setContentText("All filters fields are empty");
-                a.setHeaderText(null);
-                a.show();
-                ordersTable.getItems().clear();
-                orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
-                        .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
+                getPrincipalController().sacarAlertInfo("All filters fields are empty");
             } else {
                 aux = orderService.getOrdersById((Integer) comboBoxId.getValue());
                 ordersTable.getItems().addAll(aux);
             }
 
-            /*if (customerOrderField.getText().equals("")) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setTitle(Constants.ERROR);
-                a.setContentText("All filters fields are empty");
-                a.setHeaderText(null);
-                a.show();
-                ordersTable.getItems().clear();
-                orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
-                        .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
-            } else {
-                try {
-                    aux = orderService.getOrdersById(Integer.parseInt(customerOrderField.getText()));
-                    ordersTable.getItems().addAll(aux);
-                } catch (Exception e) {
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle(Constants.ERROR);
-                    a.setContentText("Customer id must be a number");
-                    a.setHeaderText(null);
-                    a.show();
-                }
-            }*/
         } else {
             aux = orderService.getOrdersByDate(dateField.getValue());
             ordersTable.getItems().addAll(aux);
         }
+    }
+
+    public void restartOrders() {
+        dateField.setValue(null);
+        comboBoxId.setValue(null);
+        setTables();
+        itemsTable.getItems().clear();
+        priceLabel.setText("");
     }
 }

@@ -4,20 +4,25 @@ import dao.CustomersDAO;
 import dao.OrderDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import model.Customer;
 import model.Order;
 import model.errors.CustomerError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CustomerService {
-    @Inject
-    private CustomersDAO dao;
 
+    private final CustomersDAO dao;
+    private final OrderDAO daoOrders;
+    private final OrderDAO daoOrderXml;
     @Inject
-    private OrderDAO daoOrders;
+    public CustomerService(CustomersDAO dao, @Named("orderDAO") OrderDAO daoOrders, @Named("orderXML") OrderDAO daoOrderXml) {
+        this.dao = dao;
+        this.daoOrders = daoOrders;
+        this.daoOrderXml = daoOrderXml;
+    }
 
     public Either<CustomerError, List<Customer>> getAll() {
         return dao.getAll();
@@ -36,10 +41,12 @@ public class CustomerService {
     }
 
     public Either<CustomerError, Boolean> delete(Customer c, Boolean deleteOrders) {
+        if (Boolean.TRUE.equals(deleteOrders))
+            daoOrderXml.save(daoOrderXml.getAll(c.getId()).get());
         Either<CustomerError, Integer> resultDao = dao.delete(c, deleteOrders);
         Either<CustomerError, Boolean> result;
         if (resultDao.isLeft()) {
-            if (resultDao.getLeft().getNumError() == 1451){
+            if (resultDao.getLeft().getNumError() == 2){
                 result = Either.right(true);
             }else {
                 result = Either.left(resultDao.getLeft());

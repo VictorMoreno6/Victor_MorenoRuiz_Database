@@ -79,7 +79,6 @@ public class PrincipalController {
 
         alert.getButtonTypes().setAll(continueButton, cancelButton);
 
-        // Muestra el diálogo y espera a que el usuario elija una opción
         return alert.showAndWait().orElse(cancelButton) == continueButton;
     }
 

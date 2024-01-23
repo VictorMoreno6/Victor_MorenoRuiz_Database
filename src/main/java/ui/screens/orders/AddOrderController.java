@@ -24,19 +24,15 @@ import java.util.List;
 public class AddOrderController extends BaseScreenController {
     public TableView<OrderItem> itemsTable;
     @FXML
-    public ComboBox customerIdCombo;
+    public ComboBox tableIdCombo;
     @FXML
     private Button addButton;
-
-    @FXML
-    private TableColumn<OrderItem, Integer> idItemColumn;
     @FXML
     public TableColumn<OrderItem, String> nameItemColumn;
     @FXML
     public TableColumn<OrderItem, Item> quantityItemColumn;
     @FXML
     public ComboBox itemsComboBox;
-    public TextField tableOrderField;
 
     public TextField quantityItemField;
 
@@ -56,12 +52,11 @@ public class AddOrderController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idItemColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameItemColumn.setCellValueFactory(cellData -> orderItemService.printMenuItemName(cellData.getValue()));
         quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         itemsTable.setOnMouseClicked(this::handleTableClick);
-        customerIdCombo.getItems().addAll(orderService.getIds());
+        tableIdCombo.getItems().addAll(orderService.getTableIds());
         itemsComboBox.getItems().addAll(menuItemsService.getMenuItemsName());
     }
 
@@ -86,18 +81,16 @@ public class AddOrderController extends BaseScreenController {
     }
 
     public void addOrder(ActionEvent actionEvent) {
-        if ( tableOrderField.getText().isEmpty() || customerIdCombo.getValue() == null) {
+        if ( tableIdCombo.getValue() == null) {
             getPrincipalController().sacarAlertError(Constants.THERE_IS_AN_EMPTY_FIELD);
         } else {
-            Order o = new Order(orderService.autoId(), LocalDateTime.now(), (Integer) customerIdCombo.getValue(), Integer.parseInt(tableOrderField.getText()));
+            Order o = new Order(orderService.autoId(), LocalDateTime.now(), getPrincipalController().actualUser.getId(), (Integer) tableIdCombo.getValue(), orderItems);
             if (orderService.save(o).isRight()) {
                 getPrincipalController().sacarAlertInfo(Constants.ORDER_ADDED_SUCCESSFULLY);
-                //Aqui hay un problema
-                if (orderItemService.save(orderItems, o).isRight()){
-                    getPrincipalController().sacarAlertInfo(Constants.ORDER_ITEMS_ADDED_SUCCESSFULLY);
-                } else
-                    getPrincipalController().sacarAlertError(Constants.ERROR_ADDING_ORDER_ITEMS);
                 orderItems.clear();
+                tableIdCombo.setValue(null);
+                quantityItemField.clear();
+                itemsComboBox.setValue(null);
                 setTable();
             } else {
                 getPrincipalController().sacarAlertError(Constants.ERROR_ADDING_ORDER);
@@ -109,8 +102,8 @@ public class AddOrderController extends BaseScreenController {
         if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue() == null) {
             getPrincipalController().sacarAlertError(Constants.THERE_IS_AN_EMPTY_FIELD);
         } else {
-            MenuItem mi = new MenuItem(0, (String) itemsComboBox.getValue(), "", 0);
-            OrderItem oi = new OrderItem(0, 0, mi, Integer.parseInt(quantityItemField.getText()));
+            MenuItem mi = menuItemsService.getMenuItemByName((String) itemsComboBox.getValue());
+            OrderItem oi = new OrderItem(mi, Integer.parseInt(quantityItemField.getText()));
             orderItems.add(oi);
             setTable();
         }

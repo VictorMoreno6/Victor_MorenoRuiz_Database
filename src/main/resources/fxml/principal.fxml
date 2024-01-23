@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane fx:id="root" prefHeight="500.0" prefWidth="900.0" stylesheets="@/css/style.css"
             xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.screens.principal.PrincipalController">
+            fx:controller="ui.screens.principal.PrincipalController" style="-fx-background-color: #a6c9e2;">
     <top>
-        <MenuBar fx:id="menuPrincipal">
+        <MenuBar fx:id="menuPrincipal" style="-fx-background-color: #54739e;">
             <menus>
                 <Menu fx:id="menuFile" mnemonicParsing="false" text="Options">
                     <items>

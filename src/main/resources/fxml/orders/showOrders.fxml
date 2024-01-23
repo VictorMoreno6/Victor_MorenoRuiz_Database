@@ -19,7 +19,7 @@
         </columns>
     </TableView>
     <DatePicker fx:id="dateField" layoutX="265.0" layoutY="341.0" onAction="#addFilter" prefHeight="26.0" prefWidth="150.0" promptText="Date" />
-    <Button fx:id="filterButton" layoutX="59.0" layoutY="355.0" mnemonicParsing="false" onAction="#addFilter" prefHeight="26.0" prefWidth="91.0" text="Filter" />
+    <Button fx:id="filterButton" layoutX="59.0" layoutY="355.0" mnemonicParsing="false" onAction="#restartOrders" prefHeight="26.0" prefWidth="91.0" text="Restart" />
     <ComboBox fx:id="comboBoxId" layoutX="265.0" layoutY="379.0" onAction="#addFilter" prefWidth="150.0" promptText="id" />
     <Label fx:id="customerNameLabel" alignment="CENTER" layoutX="546.0" layoutY="62.0" prefHeight="26.0" prefWidth="160.0" text="Customer name">
         <font>
@@ -37,9 +37,10 @@
             <TableColumn fx:id="quantityItemColumn" prefWidth="63.79998779296875" text="Quantity" />
         </columns>
     </TableView>
-    <Label fx:id="priceLabel" alignment="CENTER" layoutX="598.0" layoutY="379.0" prefHeight="26.0" prefWidth="160.0" text="Total amount">
+    <Label fx:id="totalLabel" alignment="CENTER" layoutX="546.0" layoutY="378.0" prefHeight="26.0" prefWidth="160.0" text="Total amount">
         <font>
             <Font size="16.0" />
         </font>
     </Label>
+   <Label fx:id="priceLabel" layoutX="706.0" layoutY="383.0" text="" />
 </AnchorPane>

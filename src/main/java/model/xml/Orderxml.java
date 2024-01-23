@@ -1,0 +1,23 @@
+package model.xml;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import java.util.List;
+@Data
+@AllArgsConstructor
+@XmlRootElement(name="order")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Orderxml {
+    @XmlElement(name="id")
+    private int id;
+    @XmlElement(name="order_item")
+    private List<OrderItemXml> orderItems;
+
+    public Orderxml() {
+    }
+}

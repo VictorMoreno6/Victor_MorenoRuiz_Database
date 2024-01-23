@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.Credential;
 import model.Customer;
 import services.CustomerService;
 import ui.screens.common.BaseScreenController;
@@ -34,6 +35,8 @@ public class AddCustomerController extends BaseScreenController {
     public TextField emailField;
     public TextField phoneField;
     public DatePicker dobField;
+    public TextField psswdField;
+    public TextField userField;
 
     @Inject
     public AddCustomerController(CustomerService servicesCustomers) {
@@ -64,12 +67,13 @@ public class AddCustomerController extends BaseScreenController {
         if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
             getPrincipalController().sacarAlertError(Constants.THERE_IS_AN_EMPTY_FIELD);
         } else {
-            if (servicesCustomers.save(new Customer(servicesCustomers.autoId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).isRight()){
+            if (servicesCustomers.save(new Customer(fnameField.getText(), lnameField.getText(), emailField.getText(),
+                    phoneField.getText(), dobField.getValue(), new Credential(userField.getText(),psswdField.getText()))).isRight()){
                 getPrincipalController().sacarAlertInfo(Constants.CUSTOMER_ADDED);
             } else {
                 getPrincipalController().sacarAlertError(Constants.CUSTOMER_NOT_ADDED);
-                setTable();
             }
+            setTable();
         }
     }
 }

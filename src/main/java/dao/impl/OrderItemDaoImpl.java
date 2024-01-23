@@ -3,74 +3,65 @@ package dao.impl;
 import dao.OrderItemDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import model.MenuItem;
 import model.Order;
 import model.OrderItem;
 import model.errors.OrderError;
+import model.hibernate.MenuItemsEntity;
+import model.hibernate.OrderItemsEntity;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class OrderItemDaoImpl implements OrderItemDAO {
+    private final JPAUtil jpautil;
 
-    private DBConnection db;
+    private EntityManager entityManager;
+
 
     @Inject
-    public OrderItemDaoImpl(DBConnection db) {
-        this.db = db;
+    public OrderItemDaoImpl(JPAUtil jpautil) {
+        this.jpautil = jpautil;
     }
     @Override
     public List<OrderItem> getAll() {
         List<OrderItem> orderItems = null;
 
-        try(Connection con = db.getConnection();
-            Statement stmt= con.createStatement()){
-            ResultSet rs = stmt.executeQuery("SELECT * FROM order_items");
+        try {
+            entityManager = jpautil.getEntityManager();
 
-            orderItems = readRs(rs);
+            TypedQuery<OrderItemsEntity> query = entityManager.createQuery("SELECT oi FROM OrderItemsEntity oi", OrderItemsEntity.class);
+            List<OrderItemsEntity> orderItemsEntities = query.getResultList();
 
-        }catch (Exception e){
+            orderItems = orderItemsEntities.stream()
+                    .map(orderItemsEntity -> new OrderItem(
+                            orderItemsEntity.getId(),
+                            orderItemsEntity.getOrdersByOrderId().getId(),
+                            new MenuItem(
+                                    orderItemsEntity.getMenuItemsByMenuItemId().getId(),
+                                    orderItemsEntity.getMenuItemsByMenuItemId().getName(),
+                                    orderItemsEntity.getMenuItemsByMenuItemId().getDescription(),
+                                    orderItemsEntity.getMenuItemsByMenuItemId().getPrice()
+                            ),
+                            orderItemsEntity.getQuantity()
+                    ))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
         }
+
         return orderItems;
-    }
-
-    public List<OrderItem> readRs(ResultSet rs){
-        try{
-            List<OrderItem> orderItems = new ArrayList<>();
-            while(rs.next()){
-                int id = rs.getInt("order_item_id");
-                int order_id = rs.getInt("order_id");
-                MenuItem menuItem = getMenuItem(rs.getInt("menu_item_id"));
-                int quantity = rs.getInt("quantity");
-                orderItems.add(new OrderItem(id, order_id, menuItem, quantity));
-            }
-            return orderItems;
-        }catch(SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    public MenuItem getMenuItem(int id){
-        MenuItem menuItem = null;
-        try(Connection con = db.getConnection();
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM menu_items WHERE menu_item_id = ?")){
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                int menuItemId = rs.getInt("menu_item_id");
-                String name = rs.getString("name");
-                String description = rs.getString("description");
-                int price = rs.getInt("price");
-                menuItem = new MenuItem(menuItemId, name, description, price);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return menuItem;
     }
 
     @Override

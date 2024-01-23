@@ -14,6 +14,9 @@ public class Customer {
     private String email;
     private String phone;
     private LocalDate dob;
+    private Credential credential;
+
+
 
     public Customer(String fileline){
         String[] elemArray = fileline.split(";");
@@ -36,5 +39,23 @@ public class Customer {
                 email + ";" +
                 phone + ";" +
                 dob ;
+    }
+
+    public Customer(String first_name, String last_name, String email, String phone, LocalDate dob, Credential credential) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.phone = phone;
+        this.dob = dob;
+        this.credential = credential;
+    }
+
+    public Customer(int id, String first_name, String last_name, String email, String phone, LocalDate dob) {
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.phone = phone;
+        this.dob = dob;
     }
 }

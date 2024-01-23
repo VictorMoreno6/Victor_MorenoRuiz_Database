@@ -4,75 +4,95 @@ import common.Constants;
 import dao.MenuItemDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import model.MenuItem;
+import model.hibernate.MenuItemsEntity;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MenuItemDaoJdbc implements MenuItemDAO {
-    private DBConnection db;
+    private final JPAUtil jpautil;
+
+    private EntityManager entityManager;
 
     @Inject
-    public MenuItemDaoJdbc(DBConnection db) {
-        this.db = db;
+    public MenuItemDaoJdbc(JPAUtil jpautil) {
+        this.jpautil = jpautil;
     }
+
+
 
 
     @Override
     public Either<String, List<MenuItem>> getAll() {
         Either<String, List<MenuItem>> result = null;
-        try(Connection con = db.getConnection();
-            Statement stmt = con.createStatement()){
-            ResultSet rs = stmt.executeQuery("SELECT * FROM menu_items");
 
-            List<MenuItem> menuItems = readRs(rs);
+        try {
+            entityManager = jpautil.getEntityManager();
+
+            TypedQuery<MenuItemsEntity> query = entityManager.createQuery("SELECT mi FROM MenuItemsEntity mi", MenuItemsEntity.class);
+            List<MenuItemsEntity> menuItemsEntities = query.getResultList();
+
+            List<MenuItem> menuItems = menuItemsEntities.stream()
+                    .map(menuItemsEntity -> new MenuItem(
+                            menuItemsEntity.getId(),
+                            menuItemsEntity.getName(),
+                            menuItemsEntity.getDescription(),
+                            menuItemsEntity.getPrice()
+                    ))
+                    .collect(Collectors.toList());
+
             result = Either.right(menuItems);
-        }catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
             result = Either.left(Constants.ERROR_CONNECTING_TO_DATABASE);
-        }
-        return result;
-    }
-
-    public List<MenuItem> readRs(ResultSet rs){
-        try{
-            List<MenuItem> menuItems = new ArrayList<>();
-            while(rs.next()){
-                int id = rs.getInt("menu_item_id");
-                String name = rs.getString("name");
-                String description = rs.getString("description");
-                double price = rs.getDouble("price");
-                menuItems.add(new MenuItem(id, name, description, price));
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
             }
-            return menuItems;
-        }catch(SQLException e){
-            e.printStackTrace();
-            return null;
         }
+
+        return result;
     }
 
     @Override
     public Either<String, MenuItem> get(int id) {
         Either<String, MenuItem> result = null;
-        try(Connection con = db.getConnection();
-            PreparedStatement preparedStatement = con.prepareStatement("SELECT * FROM menu_items WHERE menu_item_id = ?")){
-            preparedStatement.setInt(1, id);
 
-            ResultSet rs = preparedStatement.executeQuery();
+        try {
+            entityManager = jpautil.getEntityManager();
 
-            List<MenuItem> menuItems = readRs(rs);
-            if(menuItems.size() == 0){
+            MenuItemsEntity menuItemsEntity = entityManager.find(MenuItemsEntity.class, id);
+
+            if (menuItemsEntity == null) {
                 result = Either.left("No menu item found");
-            }else{
-                result = Either.right(menuItems.get(0));
+            } else {
+                MenuItem menuItem = new MenuItem(
+                        menuItemsEntity.getId(),
+                        menuItemsEntity.getName(),
+                        menuItemsEntity.getDescription(),
+                        menuItemsEntity.getPrice()
+                );
+                result = Either.right(menuItem);
             }
-        }catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
             result = Either.left(Constants.ERROR_CONNECTING_TO_DATABASE);
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
         }
+
         return result;
     }
+
 
     @Override
     public Either<String, Integer> save(MenuItem c) {

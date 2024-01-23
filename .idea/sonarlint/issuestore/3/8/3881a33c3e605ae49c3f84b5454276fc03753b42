@@ -1,6 +1,4 @@
 
-f	java:S1175"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯Ä·ú
+f	java:S117<"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯Ä·ú
 A
-java:S1168;"+Return an empty collection instead of null.(¥¹ï
-Z
-java:S1128"8Remove this unused import 'java.util.stream.Collectors'.(Óóº´úÿÿÿÿ8—áÖá´1
+java:S1168B"+Return an empty collection instead of null.(¥¹ï

@@ -25,4 +25,13 @@ public class MenuItemsService {
         }
         return result;
     }
+
+    public MenuItem getMenuItemByName(String name) {
+        for (MenuItem menuItem : menuItemDAO.getAll().get()) {
+            if (menuItem.getName().equals(name)) {
+                return menuItem;
+            }
+        }
+        return null;
+    }
 }

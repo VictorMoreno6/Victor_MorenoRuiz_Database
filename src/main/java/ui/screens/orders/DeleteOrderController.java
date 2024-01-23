@@ -1,21 +1,21 @@
 package ui.screens.orders;
 
-import common.Constants;
 import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.Item;
 import model.Order;
+import model.OrderItem;
+import services.OrderItemService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
 import java.io.IOException;
-import java.security.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class DeleteOrderController extends BaseScreenController {
     public TableView<Order> ordersTable;
@@ -23,18 +23,23 @@ public class DeleteOrderController extends BaseScreenController {
     public TableColumn<Order, LocalDateTime> dateOrderColumn;
     public TableColumn<Order, Integer> customerOrderColumn;
     public TableColumn<Order, Integer> tableOrderColumn;
-    public TableView<Item> itemsTable;
+    public TableView<OrderItem> itemsTable;
     public TableColumn<Integer, Item> idItemColumn;
     public TableColumn<String, Item> nameItemColumn;
     public TableColumn<Float, Item> priceItemColumn;
     public TableColumn<String, Item> descriptionItemColumn;
+    public TableColumn<OrderItem, String>  menuItemColumn;
+    public TableColumn<OrderItem, Integer> quantityItemColumn;
     private Order selectedOrder;
+    private List<OrderItem> orderItems;
 
     private final OrderService orderService;
+    private final OrderItemService orderItemService;
 
     @Inject
-    public DeleteOrderController(OrderService orderService) {
+    public DeleteOrderController(OrderService orderService, OrderItemService orderItemService) {
         this.orderService = orderService;
+        this.orderItemService = orderItemService;
     }
 
     public void initialize() throws IOException {
@@ -42,16 +47,20 @@ public class DeleteOrderController extends BaseScreenController {
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("table_id"));
-        idItemColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameItemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        priceItemColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        descriptionItemColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        menuItemColumn.setCellValueFactory(cellData -> orderItemService.printMenuItemName(cellData.getValue()));
+        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         ordersTable.setOnMouseClicked(this::handleTableClick);
     }
 
     private void handleTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
             selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+            if (orderItems != null)
+                orderItems.clear();
+            orderItems = orderService.getOrderItems(selectedOrder.getId());
+            itemsTable.getItems().clear();
+            itemsTable.getItems().addAll(orderItems);
         }
     }
 
@@ -62,6 +71,7 @@ public class DeleteOrderController extends BaseScreenController {
 
     private void setTables() {
         ordersTable.getItems().clear();
+        itemsTable.getItems().clear();
         orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                 .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
     }
@@ -69,23 +79,14 @@ public class DeleteOrderController extends BaseScreenController {
     public void deleteOrder(ActionEvent actionEvent) {
         if (selectedOrder == null) {
             getPrincipalController().sacarAlertError("No order selected");
-        } else
-            getPrincipalController().sacarAlertError("Select a customer to delete");
-
+        } else{
+            Order o = new Order(selectedOrder.getId(), selectedOrder.getDate(), selectedOrder.getCustomer_id(), selectedOrder.getTable_id(), orderItems);
+            if (orderService.delete(o).isRight()){
+                getPrincipalController().sacarAlertInfo("Order deleted");
+                setTables();
+            } else
+                getPrincipalController().sacarAlertError("Error deleting order");
+        }
     }
 
-   /* public void deleteCustomer(ActionEvent actionEvent) {
-        if (selectedCustomer != null){
-            servicesCustomers.delete(selectedCustomer, false).peek(result -> {
-                if (result) {
-                    if (getPrincipalController().showConfirmationDialog("Delete", "Are you sure you want to continue?, If you delete the customer, all orders they have will also be deleted.")) {
-                        servicesCustomers.delete(selectedCustomer, true);
-                    }
-                    setTables();
-                }
-            }).peekLeft(customerError -> getPrincipalController().sacarAlertError(customerError.getMessage()));
-        }
-        else
-            getPrincipalController().sacarAlertError("Select a customer to delete");
-    }*/
 }

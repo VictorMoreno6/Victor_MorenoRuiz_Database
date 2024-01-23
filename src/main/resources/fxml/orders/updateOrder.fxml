@@ -23,18 +23,18 @@
             <Font size="16.0" />
         </font>
     </Label>
-    <TableView fx:id="itemsTable" layoutX="492.0" layoutY="239.0" prefHeight="200.0" prefWidth="390.0">
+    <TableView fx:id="itemsTable" layoutX="565.0" layoutY="240.0" prefHeight="200.0" prefWidth="225.0">
         <columns>
-            <TableColumn fx:id="idItemColumn" prefWidth="50" text="Id" />
-            <TableColumn fx:id="nameItemColumn" prefWidth="85" text="Name" />
-            <TableColumn fx:id="priceItemColumn" prefWidth="60" text="Price" />
-            <TableColumn fx:id="descriptionItemColumn" prefWidth="195" text="Description" />
+            <TableColumn fx:id="menuItemColumn" prefWidth="161.79998779296875" text="Name" />
+            <TableColumn fx:id="quantityItemColumn" prefWidth="63.79998779296875" text="Quantity" />
         </columns>
     </TableView>
     <Button layoutX="643.0" layoutY="453.0" mnemonicParsing="false" onAction="#updateOrder" text="Update Order" />
     <DatePicker fx:id="dateField" layoutX="473.0" layoutY="58.0" prefHeight="26.0" prefWidth="150.0" promptText="Date" />
-    <TextField fx:id="tableOrderField" layoutX="473.0" layoutY="93.0" promptText="Table number" />
-    <TextField fx:id="customerOrderField" layoutX="473.0" layoutY="131.0" promptText="Customer" />
+    <ComboBox fx:id="tableIdComboBox" layoutX="473.0" layoutY="93.0" prefHeight="26.0" prefWidth="150.0"
+              promptText="Table id"/>
+    <ComboBox fx:id="customerComboBox" layoutX="473.0" layoutY="131.0" prefHeight="26.0" prefWidth="150.0"
+              promptText="Customer Id"/>
     <ComboBox fx:id="itemsComboBox" layoutX="688.0" layoutY="58.0" prefHeight="26.0" prefWidth="150.0"
               promptText="Menu items"/>
     <TextField fx:id="quantityItemField" layoutX="688.0" layoutY="93.0" promptText="Quantity" />

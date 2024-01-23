@@ -5,14 +5,17 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class Order {
+
     private int id;
     private LocalDateTime date;
     private int customer_id;
     private int table_id;
+    private List<OrderItem> orderItems;
 
     public Order(String fileline){
         String[] elemArray = fileline.split(";");
@@ -30,5 +33,16 @@ public class Order {
                 formattedDateTime + ";"+
                 customer_id + ";" +
                 table_id;
+    }
+
+    public Order() {
+        //
+    }
+
+    public Order(int id, LocalDateTime date, int customer_id, int table_id) {
+        this.id = id;
+        this.date = date;
+        this.customer_id = customer_id;
+        this.table_id = table_id;
     }
 }

@@ -4,7 +4,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.screens.welcome.WelcomeController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.screens.welcome.WelcomeController"
+            style="-fx-background-color: #a6c9e2;">
     <children>
         <Label fx:id="welcomeLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="168.0" prefHeight="39.0"
                prefWidth="900.0" text="Welcome">

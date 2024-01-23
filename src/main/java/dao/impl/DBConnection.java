@@ -5,12 +5,14 @@ import com.zaxxer.hikari.HikariDataSource;
 import common.Configuration;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Singleton
 public class DBConnection {
     private Configuration config;
     private DataSource hikariDataSource;
