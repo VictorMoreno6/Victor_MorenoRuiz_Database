@@ -1,22 +1,17 @@
 
-f	java:S1175"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(é¤ßª
-]
-java:S6813"BRemove this field injection and use constructor injection instead.(Áº–üÿÿÿÿ
-]
-java:S6813"BRemove this field injection and use constructor injection instead.(Áº–üÿÿÿÿ
-]
-java:S6813"BRemove this field injection and use constructor injection instead.(Áº–üÿÿÿÿ
-]
-java:S6813""BRemove this field injection and use constructor injection instead.(Áº–üÿÿÿÿ
-A
-java:S1168;"+Return an empty collection instead of null.(¥¹ï
-h
-java:S6204X"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(™“—è
-h
-java:S6204z"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
-A
-java:S1168|"+Return an empty collection instead of null.(¥¹ï
-E
-java:S1905Œ")Remove this unnecessary cast to "double".(éà‘Íÿÿÿÿÿ
+H
+java:S11689"+Return an empty collection instead of null.(¥¹ï8£öçş×1
+o
+java:S6204P"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹8¥öçş×1
+H
+java:S1168R"+Return an empty collection instead of null.(¥¹ï8¦öçş×1
+K
+java:S1905b")Remove this unnecessary cast to "double".(éà‘Íÿÿÿÿÿ8§öçş×1
 O
-java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ
+java:S1128"-Remove this unused import 'common.Constants'.(¯ŒË‚ùÿÿÿÿ8œ¼ü„Ø1
+H
+java:S1128"+Remove this unused import 'model.Customer'.(°¶ãê8œ¼ü„Ø1
+Y
+java:S1128"7Remove this unused import 'model.errors.CustomerError'.(ˆõÆşÿÿÿÿ8œ¼ü„Ø1
+V
+java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8œ¼ü„Ø1

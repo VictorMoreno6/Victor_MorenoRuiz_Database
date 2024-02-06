@@ -2,6 +2,7 @@ package model.hibernate;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 @Data
 @Entity
@@ -9,8 +10,8 @@ import lombok.Data;
 public class CredentialsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    private int id;
+    @Column(name = "_id", nullable = false)
+    private ObjectId id;
 
     @Column(name = "user_name", nullable = false, length = 20)
     private String username;
@@ -33,11 +34,4 @@ public class CredentialsEntity {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        return result;
-    }
 }

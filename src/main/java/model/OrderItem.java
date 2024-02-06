@@ -1,18 +1,16 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-@Data
-@AllArgsConstructor
-public class OrderItem {
+import com.google.gson.annotations.SerializedName;
+import jakarta.persistence.SecondaryTable;
+import lombok.*;
 
-    private int id;
-    private int idOrder;
-    private MenuItem menuItem;
+@Getter
+@Setter
+@AllArgsConstructor @NoArgsConstructor
+@Builder @ToString
+public class OrderItem {
+    @SerializedName("menu_item_id")
+    private int menuItemId;
     private int quantity;
 
-    public OrderItem(MenuItem menuItem, int quantity) {
-        this.menuItem = menuItem;
-        this.quantity = quantity;
-    }
 }

@@ -1,5 +1,3 @@
 
-k	java:S117*"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’Èúùÿÿÿÿ
-k	java:S117*"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’Èúùÿÿÿÿ
-p	java:S116"VRename this field "customer_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±®‹Ìÿÿÿÿÿ
-m	java:S116"SRename this field "table_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¸–é·şÿÿÿÿ
+k	java:S117%"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¬òŞÍıÿÿÿÿ
+t	java:S116"SRename this field "table_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¸–é·şÿÿÿÿ8Í‰ÚËÖ1

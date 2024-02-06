@@ -45,7 +45,7 @@ public class UpdateCustomerController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("_id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -59,7 +59,7 @@ public class UpdateCustomerController extends BaseScreenController {
         if (event.getClickCount() == 1) {
             oldCustomer = customersTable.getSelectionModel().getSelectedItem();
             if (oldCustomer != null) {
-                idField.setText(String.valueOf(oldCustomer.getId()));
+                idField.setText(String.valueOf(oldCustomer.get_id()));
                 fnameField.setText(oldCustomer.getFirst_name());
                 lnameField.setText(oldCustomer.getLast_name());
                 emailField.setText(oldCustomer.getEmail());
@@ -82,7 +82,7 @@ public class UpdateCustomerController extends BaseScreenController {
 
     public void updateCustomer(ActionEvent actionEvent) {
         if(!idField.getText().isEmpty() && fnameField.getText() != null && !fnameField.getText().isEmpty() && lnameField.getText() != null && !lnameField.getText().isEmpty() && emailField.getText() != null && !emailField.getText().isEmpty() && phoneField.getText() != null && !phoneField.getText().isEmpty() && dobField.getValue() != null && !dobField.getValue().toString().isEmpty()){
-            Customer newCustomer = new Customer(oldCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue());
+            Customer newCustomer = new Customer(oldCustomer.get_id(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue());
             if(servicesCustomers.update(newCustomer).isRight()){
                 getPrincipalController().sacarAlertInfo(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);
                 setTable();

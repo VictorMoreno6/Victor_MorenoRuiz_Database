@@ -38,7 +38,7 @@ public class ShowCustomersController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("_id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("email"));

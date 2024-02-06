@@ -1,26 +1,33 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.google.gson.annotations.SerializedName;
+import lombok.*;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor @NoArgsConstructor
+@Builder @ToString
 public class Customer {
-    private int id;
+    @BsonId
+    private ObjectId _id;
     private String first_name;
     private String last_name;
     private String email;
     private String phone;
+    @SerializedName("date_of_birth")
     private LocalDate dob;
-    private Credential credential;
+    List<Order> orders;
 
 
 
     public Customer(String fileline){
         String[] elemArray = fileline.split(";");
-        this.id= Integer.parseInt(elemArray[0]);
+        this._id= new ObjectId(elemArray[0]);
         this.first_name= elemArray[1];
         this.last_name= elemArray[2];
         this.email= elemArray[3];
@@ -28,12 +35,9 @@ public class Customer {
         this.dob= LocalDate.parse(elemArray[5]);
     }
 
-    public Customer() {
-
-    }
 
     public String toStringTextfile() {
-        return  id + ";" +
+        return  _id + ";" +
                 first_name + ";"+
                 last_name + ";" +
                 email + ";" +
@@ -41,17 +45,16 @@ public class Customer {
                 dob ;
     }
 
-    public Customer(String first_name, String last_name, String email, String phone, LocalDate dob, Credential credential) {
+    public Customer(ObjectId id, String first_name, String last_name, String email, String phone, LocalDate dob) {
+        this._id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
         this.phone = phone;
         this.dob = dob;
-        this.credential = credential;
     }
 
-    public Customer(int id, String first_name, String last_name, String email, String phone, LocalDate dob) {
-        this.id = id;
+    public Customer(String first_name, String last_name, String email, String phone, LocalDate dob) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;

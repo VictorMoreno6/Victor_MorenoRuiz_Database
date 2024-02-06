@@ -14,7 +14,8 @@ import lombok.Data;
 public class OrderItemXml {
 
     @XmlElement(name="menu_item")
-    private String menuItem;
+//    private String menuItem;
+    private int menuItem;
 
     @XmlElement(name="quantity")
     private int quantity;

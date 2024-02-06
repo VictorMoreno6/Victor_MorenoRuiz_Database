@@ -62,16 +62,16 @@ public class DeleteCustomerController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("_id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         phoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("dob"));
         customersTable.setOnMouseClicked(this::handleTableClick);
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
+//        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("table_id"));
     }
 
@@ -79,7 +79,7 @@ public class DeleteCustomerController extends BaseScreenController {
         if (event.getClickCount() == 1) {
             selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
             ordersTable.getItems().clear();
-            ordersTable.getItems().addAll(servicesCustomers.getOrdersOfCustomer(selectedCustomer.getId()));
+            ordersTable.getItems().addAll(selectedCustomer.getOrders());
         }
     }
 
@@ -94,7 +94,7 @@ public class DeleteCustomerController extends BaseScreenController {
                 .peekLeft(customerError -> getPrincipalController().sacarAlertError(customerError.getMessage()));
         if (selectedCustomer != null) {
             ordersTable.getItems().clear();
-            ordersTable.getItems().addAll(servicesCustomers.getOrdersOfCustomer(selectedCustomer.getId()));
+            ordersTable.getItems().addAll(selectedCustomer.getOrders());
         }
     }
 

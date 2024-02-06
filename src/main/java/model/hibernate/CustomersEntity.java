@@ -2,6 +2,7 @@ package model.hibernate;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 import java.sql.Date;
 @Data
@@ -43,16 +44,7 @@ public class CustomersEntity {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (first_name != null ? first_name.hashCode() : 0);
-        result = 31 * result + (last_name != null ? last_name.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (dob != null ? dob.hashCode() : 0);
-        return result;
-    }
+
 
     public CredentialsEntity getCredentialsById() {
         return credentialsById;

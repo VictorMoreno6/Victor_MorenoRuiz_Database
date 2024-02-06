@@ -31,37 +31,31 @@ public class OrderItemDaoImpl implements OrderItemDAO {
     }
     @Override
     public List<OrderItem> getAll() {
-        List<OrderItem> orderItems = null;
-
-        try {
-            entityManager = jpautil.getEntityManager();
-
-            TypedQuery<OrderItemsEntity> query = entityManager.createQuery("SELECT oi FROM OrderItemsEntity oi", OrderItemsEntity.class);
-            List<OrderItemsEntity> orderItemsEntities = query.getResultList();
-
-            orderItems = orderItemsEntities.stream()
-                    .map(orderItemsEntity -> new OrderItem(
-                            orderItemsEntity.getId(),
-                            orderItemsEntity.getOrdersByOrderId().getId(),
-                            new MenuItem(
-                                    orderItemsEntity.getMenuItemsByMenuItemId().getId(),
-                                    orderItemsEntity.getMenuItemsByMenuItemId().getName(),
-                                    orderItemsEntity.getMenuItemsByMenuItemId().getDescription(),
-                                    orderItemsEntity.getMenuItemsByMenuItemId().getPrice()
-                            ),
-                            orderItemsEntity.getQuantity()
-                    ))
-                    .collect(Collectors.toList());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-
-        return orderItems;
+//        List<OrderItem> orderItems = null;
+//
+//        try {
+//            entityManager = jpautil.getEntityManager();
+//
+//            TypedQuery<OrderItemsEntity> query = entityManager.createQuery("SELECT oi FROM OrderItemsEntity oi", OrderItemsEntity.class);
+//            List<OrderItemsEntity> orderItemsEntities = query.getResultList();
+//
+//            orderItems = orderItemsEntities.stream()
+//                    .map(orderItemsEntity -> new OrderItem(
+//                            orderItemsEntity.getMenuItemsByMenuItemId().getId(),
+//                            orderItemsEntity.getQuantity()
+//                    ))
+//                    .collect(Collectors.toList());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (entityManager != null) {
+//                entityManager.close();
+//            }
+//        }
+//
+//        return orderItems;
+        return null;
     }
 
     @Override

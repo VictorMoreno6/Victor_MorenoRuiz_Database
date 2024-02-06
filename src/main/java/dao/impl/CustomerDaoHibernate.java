@@ -4,20 +4,31 @@ import common.Constants;
 import dao.CustomersDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+import model.Credential;
 import model.Customer;
+import model.MenuItem;
+import model.Order;
 import model.errors.CustomerError;
 import model.hibernate.CredentialsEntity;
 import model.hibernate.CustomersEntity;
+import model.hibernate.MenuItemsEntity;
 import model.hibernate.OrdersEntity;
+import org.bson.types.ObjectId;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+//TODO
+//Se supone que solo tiene que tener getAllCustomers y getMenuItems
+@Named("customerDaoHibernate")
 public class CustomerDaoHibernate implements CustomersDAO {
 
 
@@ -42,7 +53,7 @@ public class CustomerDaoHibernate implements CustomersDAO {
             } else {
                 for (CustomersEntity entity : list) {
                     Customer customer = new Customer();
-                    customer.setId(entity.getId());
+//                    customer.set_id(entity.getId());
                     customer.setFirst_name(entity.getFirst_name());
                     customer.setLast_name(entity.getLast_name());
                     customer.setEmail(entity.getEmail());
@@ -61,166 +72,110 @@ public class CustomerDaoHibernate implements CustomersDAO {
     }
 
     @Override
-    public Either<CustomerError, Customer> get(int id) {
-        try {
-            entityManager = jpautil.getEntityManager();
-            CustomersEntity customerEntity = entityManager.find(CustomersEntity.class, id);
-
-            if (customerEntity == null) {
-                return Either.left(new CustomerError(0, Constants.ERROR_CONNECTING_TO_DATABASE));
-            } else {
-                Customer customer = new Customer();
-                customer.setId(customerEntity.getId());
-                customer.setFirst_name(customerEntity.getFirst_name());
-                customer.setLast_name(customerEntity.getLast_name());
-                customer.setEmail(customerEntity.getEmail());
-                customer.setPhone(customerEntity.getPhone());
-                customer.setDob(customerEntity.getDob().toLocalDate());
-
-                return Either.right(customer);
-            }
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
+    public Either<CustomerError, Customer> get(ObjectId id) {
+        return null;
     }
+
+//    @Override
+//    public Either<CustomerError, Customer> get(int id) {
+//        return null;
+//    }
 
     @Override
     public Either<CustomerError, Integer> save(Customer c) {
-        Either<CustomerError, Integer> either;
-
-        EntityTransaction tx = null;
-
-        try {
-            entityManager = jpautil.getEntityManager();
-            tx = entityManager.getTransaction();
-            tx.begin();
-
-
-            CredentialsEntity credential = new CredentialsEntity();
-            credential.setUsername(c.getCredential().getUsername());
-            credential.setPassword(c.getCredential().getPassword());
-
-            entityManager.persist(credential);
-
-            int credentialId = credential.getId();
-
-            CustomersEntity customerEntity = new CustomersEntity();
-            customerEntity.setId(credentialId);
-            customerEntity.setFirst_name(c.getFirst_name());
-            customerEntity.setLast_name(c.getLast_name());
-            customerEntity.setEmail(c.getEmail());
-            customerEntity.setPhone(c.getPhone());
-            customerEntity.setDob(Date.valueOf(c.getDob()));
-
-            entityManager.persist(customerEntity);
-
-            tx.commit();
-            either = Either.right(0);
-        } catch (Exception ex) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-            Logger.getLogger(CustomerDaoHibernate.class.getName()).log(Level.SEVERE, null, ex);
-            either = Either.left(new CustomerError(0, "Error connecting database"));
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-        return either;
+        return null;
     }
+
+    @Override
+    public Either<CustomerError, Integer> save(Customer c, Credential credential) {
+        return null;
+    }
+
 
     @Override
     public Either<CustomerError, Integer> update(Customer customer) {
-        Either<CustomerError, Integer> either;
-
-        try {
-            entityManager = jpautil.getEntityManager();
-            entityManager.getTransaction().begin();
-
-            CustomersEntity customerEntity = entityManager.find(CustomersEntity.class, customer.getId());
-
-            if (customerEntity == null) {
-                either = Either.left(new CustomerError(0, "Customer not found"));
-            } else {
-                // Update the fields
-                customerEntity.setFirst_name(customer.getFirst_name());
-                customerEntity.setLast_name(customer.getLast_name());
-                customerEntity.setEmail(customer.getEmail());
-                customerEntity.setPhone(customer.getPhone());
-                customerEntity.setDob(Date.valueOf(customer.getDob()));
-
-                entityManager.getTransaction().commit();
-                either = Either.right(1);
-            }
-        } catch (Exception ex) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-            Logger.getLogger(CustomerDaoHibernate.class.getName()).log(Level.SEVERE, null, ex);
-            either = Either.left(new CustomerError(0, "Error connecting database"));
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-
-        return either;
+        return null;
     }
 
     @Override
-    public Either<CustomerError, Integer> delete(Customer customer, boolean deleteOrders) {
-        Either<CustomerError, Integer> result;
-
-        try {
-            entityManager = jpautil.getEntityManager();
-            entityManager.getTransaction().begin();
-
-            CustomersEntity customerEntity = entityManager.find(CustomersEntity.class, customer.getId());
-            if (deleteOrders) {
-                entityManager.createQuery("DELETE FROM OrderItemsEntity oi WHERE oi.idOrder IN (SELECT o.id FROM OrdersEntity o WHERE o.customer_id = :customerId)")
-                        .setParameter("customerId", customer.getId())
-                        .executeUpdate();
-                entityManager.createQuery("DELETE FROM OrdersEntity o WHERE o.customer_id = :customerId")
-                        .setParameter("customerId", customer.getId())
-                        .executeUpdate();
-
-                entityManager.remove(customerEntity);
-                CredentialsEntity credentialsEntity = entityManager.find(CredentialsEntity.class, customer.getId());
-                if (credentialsEntity != null) {
-                    entityManager.remove(credentialsEntity);
-                }
-            } else {
-                OrdersEntity ordersEntity = entityManager.find(OrdersEntity.class, customer.getId());
-                if (ordersEntity != null) {
-                    return Either.left(new CustomerError(2, "The customer has orders"));
-                }
-                entityManager.remove(customerEntity);
-                CredentialsEntity credentialsEntity = entityManager.find(CredentialsEntity.class, customer.getId());
-                if (credentialsEntity != null) {
-                    entityManager.remove(credentialsEntity);
-                }
-            }
-            entityManager.getTransaction().commit();
-            result = Either.right(0);
-
-        } catch (Exception ex) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-
-            Logger.getLogger(CustomerDaoHibernate.class.getName()).log(Level.SEVERE, null, ex);
-            result = Either.left(new CustomerError(1, "Error connecting to the database"));
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-
-        return result;
+    public Either<CustomerError, Integer> delete(Customer c, boolean deleteOrders) {
+        return null;
     }
 
+    @Override
+    public Customer getCustomerByOrder(Order order) {
+        return null;
+    }
+
+
+
+
+    //TODO
+    //Aqui esta el menuItem con hibernate
+//    @Override
+//    public Either<String, List<MenuItem>> getAll() {
+//        Either<String, List<MenuItem>> result = null;
+//
+//        try {
+//            entityManager = jpautil.getEntityManager();
+//
+//            TypedQuery<MenuItemsEntity> query = entityManager.createQuery("SELECT mi FROM MenuItemsEntity mi", MenuItemsEntity.class);
+//            List<MenuItemsEntity> menuItemsEntities = query.getResultList();
+//
+//            List<MenuItem> menuItems = menuItemsEntities.stream()
+//                    .map(menuItemsEntity -> new MenuItem(
+//                            menuItemsEntity.getId(),
+//                            menuItemsEntity.getName(),
+//                            menuItemsEntity.getDescription(),
+//                            menuItemsEntity.getPrice()
+//                    ))
+//                    .collect(Collectors.toList());
+//
+//            result = Either.right(menuItems);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            result = Either.left(Constants.ERROR_CONNECTING_TO_DATABASE);
+//        } finally {
+//            if (entityManager != null) {
+//                entityManager.close();
+//            }
+//        }
+//
+//        return result;
+//    }
+//
+//    @Override
+//    public Either<String, MenuItem> get(int id) {
+//        Either<String, MenuItem> result = null;
+//
+//        try {
+//            entityManager = jpautil.getEntityManager();
+//
+//            MenuItemsEntity menuItemsEntity = entityManager.find(MenuItemsEntity.class, id);
+//
+//            if (menuItemsEntity == null) {
+//                result = Either.left("No menu item found");
+//            } else {
+//                MenuItem menuItem = new MenuItem(
+//                        menuItemsEntity.getId(),
+//                        menuItemsEntity.getName(),
+//                        menuItemsEntity.getDescription(),
+//                        menuItemsEntity.getPrice()
+//                );
+//                result = Either.right(menuItem);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            result = Either.left(Constants.ERROR_CONNECTING_TO_DATABASE);
+//        } finally {
+//            if (entityManager != null) {
+//                entityManager.close();
+//            }
+//        }
+//
+//        return result;
+//    }
 
 }

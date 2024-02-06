@@ -43,9 +43,9 @@ public class DeleteOrderController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
+//        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("table_id"));
 
         menuItemColumn.setCellValueFactory(cellData -> orderItemService.printMenuItemName(cellData.getValue()));
@@ -58,7 +58,7 @@ public class DeleteOrderController extends BaseScreenController {
             selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
             if (orderItems != null)
                 orderItems.clear();
-            orderItems = orderService.getOrderItems(selectedOrder.getId());
+            orderItems = selectedOrder.getOrderItems();
             itemsTable.getItems().clear();
             itemsTable.getItems().addAll(orderItems);
         }
@@ -80,8 +80,8 @@ public class DeleteOrderController extends BaseScreenController {
         if (selectedOrder == null) {
             getPrincipalController().sacarAlertError("No order selected");
         } else{
-            Order o = new Order(selectedOrder.getId(), selectedOrder.getDate(), selectedOrder.getCustomer_id(), selectedOrder.getTable_id(), orderItems);
-            if (orderService.delete(o).isRight()){
+            Order o = new Order(selectedOrder.getDate(), selectedOrder.getTable_id(), orderItems);
+                if (orderService.delete(selectedOrder).isRight()){
                 getPrincipalController().sacarAlertInfo("Order deleted");
                 setTables();
             } else

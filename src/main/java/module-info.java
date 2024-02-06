@@ -15,6 +15,8 @@ module javafx {
     requires spring.tx;
     requires jakarta.annotation;
     requires jakarta.persistence;
+    requires mongo.java.driver;
+    requires com.google.gson;
 //    requires jakarta.jakartaee.web.api;
 
     exports ui.main to javafx.graphics;
@@ -29,10 +31,12 @@ module javafx {
     exports model.errors;
     exports model.xml;
     exports model.hibernate;
+    exports model.gsonAdapters;
 
 
+    opens model;
     opens model.xml to jakarta.xml.bind;
-    opens model to jakarta.xml.bind;
+//    opens model to jakarta.xml.bind;
     opens ui.screens.orders;
     opens ui.screens.login;
     opens ui.screens.principal;

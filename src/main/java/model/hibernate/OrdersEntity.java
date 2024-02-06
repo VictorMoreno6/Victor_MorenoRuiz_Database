@@ -25,10 +25,6 @@ public class OrdersEntity {
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = true)
     private CustomersEntity customersByCustomerId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "table_id", referencedColumnName = "table_number_id")
-//    private RestaurantTablesEntity restaurantTablesByTableId;
-
 
     @Override
     public boolean equals(Object o) {

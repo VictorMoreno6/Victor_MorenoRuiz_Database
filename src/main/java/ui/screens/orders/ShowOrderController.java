@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.*;
+import org.bson.types.ObjectId;
 import services.CustomerService;
 import services.OrderItemService;
 import services.OrderService;
@@ -57,9 +58,9 @@ public class ShowOrderController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
+//        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("table_id"));
         comboBoxId.getItems().addAll(orderService.getIds());
        // filterComboBox.getItems().addAll("Date", "Customer");
@@ -75,28 +76,28 @@ public class ShowOrderController extends BaseScreenController {
             itemsTable.getItems().clear();
             priceLabel.setText("");
             Order order = ordersTable.getSelectionModel().getSelectedItem();
-            if (!orderService.getOrderItems(order.getId()).isEmpty()){
-                itemsTable.getItems().addAll(orderService.getOrderItems(order.getId()));
-                priceLabel.setText(orderService.getTotalPrice(order.getId()) + "€");
+            if (!order.getOrderItems().isEmpty()) {
+                itemsTable.getItems().addAll(order.getOrderItems());
+                priceLabel.setText(orderService.getTotalPrice(order.getOrderItems()) + "€");
             }
-            customerNameLabel.setText(customerService.get(order.getCustomer_id()).get().getFirst_name()
-                    + " " + customerService.get(order.getCustomer_id()).get().getLast_name());
+//            customerNameLabel.setText(customerService.getCustomerByOrder(order).getFirst_name()
+//                    + " " + customerService.getCustomerByOrder(order).getLast_name());
         }
     }
 
     @Override
     public void principalCargado() throws IOException {
         setTables();
-        if (getPrincipalController().actualUser.getId() > 0)
-            comboBoxId.setVisible(false);
-        else
+        if (getPrincipalController().actualUser.getUsername().equals("root"))
             comboBoxId.setVisible(true);
+        else
+            comboBoxId.setVisible(false);
     }
 
     private void setTables() {
         ordersTable.getItems().clear();
-        int i = getPrincipalController().actualUser.getId();
-        if (i < 0)
+        ObjectId i = getPrincipalController().actualUser.get_id();
+        if (getPrincipalController().actualUser.getUsername().equals("root"))
             orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                 .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
         else {
@@ -104,6 +105,8 @@ public class ShowOrderController extends BaseScreenController {
         }
     }
 
+    //TODO
+    //ver si el filtro este va bn
     public void addFilter() {
         List<Order> aux;
         ordersTable.getItems().clear();
@@ -111,7 +114,7 @@ public class ShowOrderController extends BaseScreenController {
             if (comboBoxId.getValue() == null) {
                 getPrincipalController().sacarAlertInfo("All filters fields are empty");
             } else {
-                aux = orderService.getOrdersById((Integer) comboBoxId.getValue());
+                aux = orderService.getOrdersById((ObjectId) comboBoxId.getValue());
                 ordersTable.getItems().addAll(aux);
             }
 

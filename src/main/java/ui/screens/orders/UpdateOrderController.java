@@ -19,6 +19,8 @@ import ui.screens.common.BaseScreenController;
 import java.io.IOException;
 import java.security.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateOrderController extends BaseScreenController {
@@ -27,7 +29,7 @@ public class UpdateOrderController extends BaseScreenController {
     private final OrderItemService orderItemService;
     public TableView<Order> ordersTable;
     public TableColumn<Integer, Order> idOrderColumn;
-    public TableColumn<Timestamp, Order> dateOrderColumn;
+    public TableColumn<LocalDateTime, Order> dateOrderColumn;
     public TableColumn<Integer, Order> customerOrderColumn;
     public TableColumn<Integer, Order> tableOrderColumn;
     public TableView<OrderItem> itemsTable;
@@ -50,7 +52,12 @@ public class UpdateOrderController extends BaseScreenController {
     private List<OrderItem> orderItems;
     private OrderItem selectedOrderItem;
 
+    private Order selectedOrder;
+
     private int orderid;
+    private int hour;
+    private int minutes;
+    private int seconds;
 
 
     @Inject
@@ -61,9 +68,9 @@ public class UpdateOrderController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
+//        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customer_id"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("table_id"));
 
         ordersTable.setOnMouseClicked(this::handleTableClick);
@@ -87,16 +94,25 @@ public class UpdateOrderController extends BaseScreenController {
         if (event.getClickCount() == 1) {
             if (orderItems != null)
                 orderItems.clear();
-            Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+            selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+            hour = selectedOrder.getDate().getHour();
+            minutes = selectedOrder.getDate().getMinute();
+            seconds = selectedOrder.getDate().getSecond();
             if (selectedOrder != null) {
                 tableIdComboBox.setValue(selectedOrder.getTable_id());
-                customerComboBox.setValue(selectedOrder.getCustomer_id());
                 dateField.setValue(LocalDate.from(selectedOrder.getDate()));
-                orderItems = orderService.getOrderItems(selectedOrder.getId());
-                orderid = selectedOrder.getId();
+                orderItems = new ArrayList<>(selectedOrder.getOrderItems());
+//                orderid = selectedOrder.getId();
             }
             itemsTable.getItems().clear();
             itemsTable.getItems().addAll(orderItems);
+//            if (selectedOrder.getOrderItems() != null){
+//                orderItems = selectedOrder.getOrderItems();
+//                itemsTable.getItems().addAll(orderItems);
+//            }
+//            if (orderItems == null) {
+//                orderItems = new ArrayList<>();
+//            }
         }
     }
 
@@ -105,21 +121,23 @@ public class UpdateOrderController extends BaseScreenController {
         setTables();
     }
 
+    //TODO
+    //Mirar como distingo el root del resto
     private void setTables() {
         ordersTable.getItems().clear();
-        if (getPrincipalController().actualUser.getId() < 0) {
+        if (getPrincipalController().actualUser.getUsername().equals("root")) {
             orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().sacarAlertError(orderError.getMessage()));
         } else {
-            ordersTable.getItems().addAll(orderService.getOrdersById(getPrincipalController().actualUser.getId()));
+            ordersTable.getItems().addAll(orderService.getOrdersById(getPrincipalController().actualUser.get_id()));
         }
 
         itemsTable.getItems().clear();
     }
 
     public void updateOrder(ActionEvent actionEvent) {
-        Order o = new Order(orderid, dateField.getValue().atStartOfDay(), (Integer) customerComboBox.getValue(), (Integer) tableIdComboBox.getValue(), orderItems);
-        if (orderService.update(o).isRight()) {
+        Order o = new Order( dateField.getValue().atTime(hour, minutes, seconds), (Integer) tableIdComboBox.getValue(), orderItems);
+        if (orderService.update(o, selectedOrder).isRight()) {
             getPrincipalController().sacarAlertInfo(Constants.ORDER_UPDATED_SUCCESSFULLY);
             orderItems.clear();
             tableIdComboBox.setValue(null);
@@ -127,7 +145,7 @@ public class UpdateOrderController extends BaseScreenController {
             dateField.setValue(null);
             setTables();
         } else {
-            getPrincipalController().sacarAlertError("Error updating the customer");
+            getPrincipalController().sacarAlertError("Error updating the order");
         }
     }
 
@@ -136,7 +154,8 @@ public class UpdateOrderController extends BaseScreenController {
             getPrincipalController().sacarAlertError(Constants.THERE_IS_AN_EMPTY_FIELD);
         } else {
             MenuItem mi = menuItemsService.getMenuItemByName((String) itemsComboBox.getValue());
-            OrderItem oi = new OrderItem(mi, Integer.parseInt(quantityItemField.getText()));
+            OrderItem oi = new OrderItem(mi.get_id(), Integer.parseInt(quantityItemField.getText()));
+
             orderItems.add(oi);
             itemsTable.getItems().clear();
             itemsTable.getItems().addAll(orderItems);

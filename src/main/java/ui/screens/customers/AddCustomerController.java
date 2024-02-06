@@ -44,7 +44,7 @@ public class AddCustomerController extends BaseScreenController {
     }
 
     public void initialize() throws IOException {
-        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("_id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("first_name"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("last_name"));
         emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -68,7 +68,7 @@ public class AddCustomerController extends BaseScreenController {
             getPrincipalController().sacarAlertError(Constants.THERE_IS_AN_EMPTY_FIELD);
         } else {
             if (servicesCustomers.save(new Customer(fnameField.getText(), lnameField.getText(), emailField.getText(),
-                    phoneField.getText(), dobField.getValue(), new Credential(userField.getText(),psswdField.getText()))).isRight()){
+                    phoneField.getText(), dobField.getValue()), new Credential(userField.getText(),psswdField.getText())).isRight()){
                 getPrincipalController().sacarAlertInfo(Constants.CUSTOMER_ADDED);
             } else {
                 getPrincipalController().sacarAlertError(Constants.CUSTOMER_NOT_ADDED);

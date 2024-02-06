@@ -101,7 +101,7 @@ public class PrincipalController {
     public void onLoginDone(Credential user) {
         actualUser = user;
         menuPrincipal.setVisible(true);
-        if (actualUser.getId() > 0) {
+        if (!actualUser.getUsername().equals("root")) {
             addOrder.setVisible(true);
             menuCustomers.setVisible(false);
             deleteOrder.setVisible(false);

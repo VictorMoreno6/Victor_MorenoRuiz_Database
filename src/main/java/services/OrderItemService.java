@@ -29,6 +29,6 @@ public class OrderItemService {
 
 
     public SimpleStringProperty printMenuItemName(OrderItem value) {
-        return new SimpleStringProperty(value.getMenuItem().getName());
+        return new SimpleStringProperty(menuItemDAO.get(value.getMenuItemId()).get().getName());
     }
 }

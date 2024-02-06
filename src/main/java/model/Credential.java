@@ -1,14 +1,21 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.google.gson.annotations.SerializedName;
+import lombok.*;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
 
-@Data
-@AllArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
+@Builder @ToString
 public class Credential {
-
-    private int id;
+    @BsonId
+    @Getter(AccessLevel.PUBLIC)
+    public ObjectId _id;
+    @Getter(AccessLevel.PUBLIC)
+    @SerializedName("user_name")
     private String username;
+    @Getter(AccessLevel.PUBLIC)
     private String password;
 
     public Credential(String username, String password) {

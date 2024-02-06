@@ -1,12 +1,13 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor @NoArgsConstructor
+@Builder @ToString
 public class MenuItem {
-    private int id;
+    private int _id;
     private String name;
     private String description;
     private double price;

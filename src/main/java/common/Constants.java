@@ -47,4 +47,9 @@ public class Constants {
     public static final String ERROR_CONNECTING_TO_DATABASE = "Error connecting to database";
     public static final String ROOT = "root";
     public static final String DAM = "2dam";
+    public static final String MONGODB_INFORMATICA_IESQUEVEDO_ES_2323 = "mongodb://informatica.iesquevedo.es:2323/";
+    public static final String VICTORMORENO_RESTAURANT = "victormoreno_restaurant";
+    public static final String CUSTOMERS = "customers";
+    public static final String CREDENTIALS = "credentials";
+    public static final String MENUITEMS = "menuitems";
 }
