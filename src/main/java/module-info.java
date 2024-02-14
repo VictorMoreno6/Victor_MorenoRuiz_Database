@@ -34,6 +34,7 @@ module javafx {
     exports model.gsonAdapters;
 
 
+    opens ui;
     opens model;
     opens model.xml to jakarta.xml.bind;
 //    opens model to jakarta.xml.bind;
